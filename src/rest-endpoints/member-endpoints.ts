@@ -11,4 +11,3 @@ router.get('/member', (ctx: SysTypes.ExtendedRouterContext, next: () => Promise<
 });
 
 export default router;
-
