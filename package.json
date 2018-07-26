@@ -19,6 +19,7 @@
   "devDependencies": {
     "@types/koa": "^2.0.46",
     "@types/koa-router": "^7.0.30",
+    "@types/winston": "^2.3.9",
     "gulp": "^3.9.1",
     "gulp-tsc": "^1.3.2",
     "run-sequence": "^2.2.1"
@@ -26,6 +27,7 @@
   "dependencies": {
     "koa": "^2.5.2",
     "koa-router": "^7.4.0",
-    "mysql": "^2.16.0"
+    "mysql": "^2.16.0",
+    "winston": "^3.0.0"
   }
 }
