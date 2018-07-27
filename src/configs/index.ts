@@ -15,7 +15,7 @@ export interface MysqlConfig {
 }
 
 export enum AppEnv {
-  DEV = 'dev', PROD = 'prod'
+  DEV = 'develop', PROD = 'production'
 }
 
 export interface RootConfig {
@@ -28,10 +28,8 @@ export interface ConfigReader {
   read(): RootConfig;
 }
 
-let config: RootConfig = null;
-export default config;
+export let config: RootConfig = null;
 
-(() => {
-  //TODO: loads config from each readers, and merge it.
-  //TODO: config validations
-})();
+export function initialize() {
+  config = fileConfReader.read();
+}
