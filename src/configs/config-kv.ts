@@ -29,6 +29,12 @@ export function map(rawConfigMap: { [key: string]: string | number}): RootConfig
       database: null
     }
   };
+  _.each(Object.keys(configMappers), (key: string) => {
+    let mapper: (root:RootConfig, value: any) => void = configMappers[key];
+    if (rawConfigMap[key]) {
+      mapper(rootConfig, rawConfigMap[key]);
+    }
+  });
   return rootConfig;
 }
 
