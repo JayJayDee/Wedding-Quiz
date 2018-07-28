@@ -12,6 +12,10 @@ const configMappers = {
   'MYSQL_DATABASE': (root: RootConfig, value: any) => root.mysql.database = value
 };
 
+export function configKeys(): Array<string> {
+  return Object.keys(configMappers);
+}
+
 export function map(rawConfigMap: { [key: string]: string | number}): RootConfig {
   let env: AppEnv = AppEnv.DEV;
   if (process.env.NODE_ENV === 'production') {
@@ -33,6 +37,8 @@ export function map(rawConfigMap: { [key: string]: string | number}): RootConfig
     let mapper: (root:RootConfig, value: any) => void = configMappers[key];
     if (rawConfigMap[key]) {
       mapper(rootConfig, rawConfigMap[key]);
+    } else {
+      throw new ConfigurationPropertyRequiredError(`${key} configuration required`);
     }
   });
   return rootConfig;

@@ -31,5 +31,5 @@ export interface ConfigReader {
 export let config: RootConfig = null;
 
 export function initialize() {
-  config = fileConfReader.read();
+  config = fileConfReader.read(); 
 }
