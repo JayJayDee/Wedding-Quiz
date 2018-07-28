@@ -1,5 +1,4 @@
 
-import * as Router from 'koa-router';
 import * as SysTypes from '../types/sys-types';
 
 export async function responseBuildingMiddleware(ctx: SysTypes.ExtendedRouterContext, next: () => any) {
