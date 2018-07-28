@@ -3,12 +3,13 @@ import * as Koa from 'koa';
 import * as endpoints from './rest-endpoints';
 import * as middlewares from './middlewares';
 import * as configs from './configs';
+import log from './loggers';
 
 configs.initialize();
 
 const app = new Koa();
 app.use(middlewares.responseBuildingMiddleware);
 endpoints.reigsterRoutersToApp(app);
-app.listen(5000);
+app.listen(configs.config.http.port);
 
-console.log('server started');
+log.info(`wedd-quiz server started at port:${configs.config.http.port}`);
