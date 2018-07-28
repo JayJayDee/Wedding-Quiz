@@ -8,8 +8,6 @@ export async function errorMiddleware(ctx: SysTypes.ExtendedRouterContext, next:
   try {
     await next();
   } catch (err) {
-    log.error('error fired!');
-    log.error(err);
     if (err instanceof BaseLogicalError) {
       ctx.body = {
         code: err.code,

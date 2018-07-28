@@ -8,8 +8,8 @@ import log from './loggers';
 configs.initialize();
 
 const app = new Koa();
-app.use(middlewares.errorMiddleware);
 app.use(middlewares.responseBuildingMiddleware);
+app.use(middlewares.errorMiddleware);
 endpoints.reigsterRoutersToApp(app);
 app.listen(configs.config.http.port);
 
