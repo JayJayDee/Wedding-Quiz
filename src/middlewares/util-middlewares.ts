@@ -7,5 +7,5 @@ export async function responseBuildingMiddleware(ctx: SysTypes.ExtendedRouterCon
     ctx.headers['Content-Type'] = 'application/json';
     ctx.status = 200;
   }
-  next();
+  await next();
 }

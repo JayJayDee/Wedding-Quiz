@@ -5,26 +5,24 @@ import * as SysTypes from '../types/sys-types';
 import * as Credential from '../utils/credential';
 import log from '../loggers';
 
-import { MemberModel } from '../models';
+import { MemberModel, Member } from '../models';
 
 const router: Router = new Router;
 
-router.post('/member', async (ctx: SysTypes.ExtendedRouterContext, next: () => Promise<any>) => {
+router.post('/member', async function(ctx: SysTypes.ExtendedRouterContext) {
   let memberToken = await Credential.generateMemberToken();
 
-  // let resp = await MemberModel.insertNewMember(memberToken);
-
+  let resp = await MemberModel.insertNewMember(memberToken);
   ctx.sendApiSuccess({
-    'member_token': memberToken
+    member_token: memberToken
   });
 });
 
-router.get('/member/:member_token', async (ctx: SysTypes.ExtendedRouterContext, next: () => Promise<any>) => {
+router.get('/member/:member_token', async function(ctx: SysTypes.ExtendedRouterContext) {
   let memberToken = ctx.params['member_token'];
-  
-  ctx.sendApiSuccess({
-    'test': 'test-member-resp'
-  });
+
+  let member: Member = await MemberModel.getMember(1);
+  ctx.sendApiSuccess(member);
 });
 
 export default router;

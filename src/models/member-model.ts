@@ -4,7 +4,7 @@ import { Member, ReqMemberUpdate } from './index';
 import log from '../loggers';
 
 export const MemberModel = {
-  insertNewMember: async function (memberToken: string): Promise<any> {
+  insertNewMember: async function (memberToken: string): Promise<number> {
     let query: string = 
     `
       INSERT INTO 
@@ -14,11 +14,12 @@ export const MemberModel = {
     `;
     let params: any[] = [memberToken];
     let resp: any = await db.query(query, params);
-    log.debug(resp);
+    let memberNo: number = resp.insertId;
+    return memberNo;
   },
 
   updateMember: async function(member: ReqMemberUpdate): Promise<any> {
-
+    //TODO: update member information which has member_no
   },
 
   getMember: async function(memberNo: number): Promise<Member> {
@@ -38,7 +39,7 @@ export const MemberModel = {
     }
 
     let member: Member = {
-      memberToken: rows[0]['member_token'],
+      member_token: rows[0]['member_token'],
       name: rows[0]['name'],
       phone: rows[0]['phone']
     };

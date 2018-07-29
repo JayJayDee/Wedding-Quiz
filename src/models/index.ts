@@ -1,13 +1,13 @@
 
 export interface Member {
-  memberToken: string;
+  member_token: string;
   name: string;
   phone: string;
   regDate?: Date;
 }
 
 export interface ReqMemberUpdate { 
-  memberNo: number;
+  member_no: number;
   name: string;
   phone: string;
 }

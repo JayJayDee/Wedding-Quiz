@@ -2,6 +2,7 @@
 import * as mysql from 'mysql';
 
 import * as configs from '../configs';
+import log from '../loggers';
 import { PoolConnection } from 'mysql';
 
 const connectionPool: mysql.Pool = mysql.createPool({
