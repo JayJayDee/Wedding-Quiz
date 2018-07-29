@@ -4,6 +4,7 @@ import { Member, ReqMemberCreate } from './index';
 import log from '../loggers';
 
 export const MemberModel = {
+  
   insertNewMember: async function (member: ReqMemberCreate): Promise<number> {
     let query: string = 
     `

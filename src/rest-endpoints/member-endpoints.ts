@@ -32,6 +32,8 @@ router.post('/member', async function(ctx: SysTypes.ExtendedRouterContext) {
 router.get('/member/:member_token', async function(ctx: SysTypes.ExtendedRouterContext) {
   let memberToken = ctx.params['member_token'];
 
+  if (!memberToken) throw new ParameterValidationError('member_token');
+
   let member: Member = await MemberModel.getMember(1);
   if (!member) {
     //TODO: throw exception
