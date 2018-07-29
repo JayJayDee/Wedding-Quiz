@@ -7,3 +7,9 @@ export class BaseLogicalError extends Error {
     this.code = code;
   }
 }
+
+export class ParameterValidationError extends BaseLogicalError {
+  constructor(keyName: string) {
+    super('INVALID_PARAM', `parameter not supplied or invalid param: ${keyName}`);
+  }
+}
