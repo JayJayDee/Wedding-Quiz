@@ -1,13 +1,47 @@
 
 import db from '../databases';
-import { Member } from './index';
+import { Member, ReqMemberUpdate } from './index';
+import log from '../loggers';
 
 export const MemberModel = {
   insertNewMember: async function (memberToken: string): Promise<any> {
-    
+    let query: string = 
+    `
+      INSERT INTO 
+        wedd_member 
+      SET 
+        member_token=?
+    `;
+    let params: any[] = [memberToken];
+    let resp: any = await db.query(query, params);
+    log.debug(resp);
   },
 
-  updateMember: async function(memberToken: string, member: Member): Promise<any> {
+  updateMember: async function(member: ReqMemberUpdate): Promise<any> {
 
+  },
+
+  getMember: async function(memberNo: number): Promise<Member> {
+    let query: string = 
+    `
+      SELECT 
+        * 
+      FROM 
+        wedd_member
+      WHERE 
+        no=?
+    `;
+    let params: any[] = [memberNo];
+    let rows: any[] = await db.query(query, params);
+    if (rows.length === 0) {
+      return null;
+    }
+
+    let member: Member = {
+      memberToken: rows[0]['member_token'],
+      name: rows[0]['name'],
+      phone: rows[0]['phone']
+    };
+    return member;
   }
 }
