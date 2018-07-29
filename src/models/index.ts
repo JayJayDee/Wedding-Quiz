@@ -6,8 +6,7 @@ export interface Member {
   regDate?: Date;
 }
 
-export interface ReqMemberUpdate { 
-  member_no: number;
+export interface ReqMemberCreate { 
   name: string;
   phone: string;
 }

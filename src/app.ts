@@ -3,12 +3,14 @@ import * as configs from './configs';
 configs.initialize();
 
 import * as Koa from 'koa';
+import * as KoaBodyParser from 'koa-bodyparser';
 import * as endpoints from './rest-endpoints';
 import * as middlewares from './middlewares';
 
 import log from './loggers';
 
 const app = new Koa();
+app.use(KoaBodyParser());
 app.use(middlewares.responseBuildingMiddleware);
 app.use(middlewares.errorMiddleware);
 endpoints.reigsterRoutersToApp(app);

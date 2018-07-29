@@ -18,6 +18,7 @@
   "homepage": "https://github.com/JayJayDee/Wedding-Quiz#readme",
   "devDependencies": {
     "@types/koa": "^2.0.46",
+    "@types/koa-bodyparser": "^5.0.1",
     "@types/koa-router": "^7.0.30",
     "@types/lodash": "^4.14.114",
     "@types/mysql": "^2.15.5",
@@ -29,6 +30,7 @@
   "dependencies": {
     "@types/moment": "^2.13.0",
     "koa": "^2.5.2",
+    "koa-bodyparser": "^4.2.1",
     "koa-router": "^7.4.0",
     "lodash": "^4.17.10",
     "moment": "^2.22.2",

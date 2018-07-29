@@ -3,6 +3,10 @@ import * as _ from 'lodash';
 
 import fileConfReader from './file-conf-reader';
 
+export interface CredentialConfig {
+  serverKey: string;
+}
+
 export interface HttpConfig {
   port: number; 
 }
@@ -23,6 +27,7 @@ export interface RootConfig {
   env: AppEnv;
   http: HttpConfig;
   mysql: MysqlConfig;
+  credential: CredentialConfig;
 }
 
 export interface ConfigReader {

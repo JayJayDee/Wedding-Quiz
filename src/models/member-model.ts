@@ -1,25 +1,23 @@
 
 import db from '../databases';
-import { Member, ReqMemberUpdate } from './index';
+import { Member, ReqMemberCreate } from './index';
 import log from '../loggers';
 
 export const MemberModel = {
-  insertNewMember: async function (memberToken: string): Promise<number> {
+  insertNewMember: async function (member: ReqMemberCreate): Promise<number> {
     let query: string = 
     `
       INSERT INTO 
         wedd_member 
       SET 
-        member_token=?
+        name=?,
+        phone=?,
+        reg_date=NOW()
     `;
-    let params: any[] = [memberToken];
+    let params: any[] = [member.name, member.phone];
     let resp: any = await db.query(query, params);
     let memberNo: number = resp.insertId;
     return memberNo;
-  },
-
-  updateMember: async function(member: ReqMemberUpdate): Promise<any> {
-    //TODO: update member information which has member_no
   },
 
   getMember: async function(memberNo: number): Promise<Member> {
