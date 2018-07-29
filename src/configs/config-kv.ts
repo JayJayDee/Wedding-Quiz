@@ -9,7 +9,8 @@ const configMappers = {
   'MYSQL_HOST': (root: RootConfig, value: any) => root.mysql.host = value,
   'MYSQL_USER': (root: RootConfig, value: any) => root.mysql.user = value,
   'MYSQL_PASSWORD': (root: RootConfig, value: any) => root.mysql.password = value,
-  'MYSQL_DATABASE': (root: RootConfig, value: any) => root.mysql.database = value
+  'MYSQL_DATABASE': (root: RootConfig, value: any) => root.mysql.database = value,
+  'MYSQL_POOLSIZE': (root: RootConfig, value: any) => root.mysql.poolSize = value,
 };
 
 export function configKeys(): Array<string> {
@@ -30,7 +31,8 @@ export function map(rawConfigMap: { [key: string]: string | number}): RootConfig
       host: null,
       user: null,
       password: null,
-      database: null
+      database: null,
+      poolSize: null
     }
   };
   _.each(Object.keys(configMappers), (key: string) => {

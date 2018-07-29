@@ -8,6 +8,7 @@ import log from '../loggers';
 const router: Router = new Router;
 
 router.get('/member', (ctx: SysTypes.ExtendedRouterContext, next: () => Promise<any>) => {
+  log.info('test log');
   ctx.sendApiSuccess({
     'test': 'test2' 
   });

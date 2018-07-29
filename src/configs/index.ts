@@ -12,6 +12,7 @@ export interface MysqlConfig {
   user: string;
   password: string;
   database: string;
+  poolSize: number;
 }
 
 export enum AppEnv {
