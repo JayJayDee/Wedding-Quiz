@@ -4,7 +4,7 @@ import * as mysql from 'mysql';
 import * as configs from '../configs';
 import log from '../loggers';
 import { PoolConnection } from 'mysql';
-import { resolve } from 'path';
+import { DefaultTransactionExecutor } from './default-trans-executor';
 
 const connectionPool: mysql.Pool = mysql.createPool({
   connectionLimit: configs.config.mysql.poolSize,
@@ -36,26 +36,6 @@ export interface DatabaseOperation {
   transaction(): Promise<TransactionExecutor>;
 }
 
-const transExecutor: TransactionExecutor = {
-  query: function(query: string, param?: any[]): Promise<any> {
-    return new Promise((resolve: Function, reject: Function) => {
-
-    });
-  },
-
-  commit: function(): Promise<any> {
-    return new Promise((resolve: Function, reject: Function) => {
-
-    });
-  },
-
-  rollback: function(): Promise<any> {
-    return new Promise((resolve: Function, reject: Function) => {
-
-    });
-  }
-}
-
 const db: DatabaseOperation = {
   query: function (query: string, param?: any[]) {
     return new Promise((resolve: Function, reject: Function) => {
@@ -76,14 +56,15 @@ const db: DatabaseOperation = {
     });
   },
 
-  transaction: function() {
+  transaction: function(): Promise<TransactionExecutor> {
     return new Promise((resolve: Function, reject: Function) => {
       accquireConnection()
       .then((connection: PoolConnection) => {
-        
+        let executor: TransactionExecutor = new DefaultTransactionExecutor(connection);
+        return resolve(executor);
       })
       .catch((err: mysql.MysqlError) => {
-        //TODO: to be implemented
+        return reject(err);
       });
     });
   }
