@@ -13,3 +13,9 @@ export class ParameterValidationError extends BaseLogicalError {
     super('INVALID_PARAM', `parameter not supplied or invalid param: ${keyName}`);
   }
 }
+
+export class InvalidCredentialError extends BaseLogicalError {
+  constructor() { 
+    super('INVALID_CREDENTIAL', 'supplied credential was not valid.');
+  }
+}

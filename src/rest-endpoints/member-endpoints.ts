@@ -6,7 +6,7 @@ import * as Credential from '../utils/credential';
 import log from '../loggers';
 
 import { MemberModel, Member, ReqMemberCreate } from '../models';
-import { ParameterValidationError } from './errors';
+import { ParameterValidationError, InvalidCredentialError } from './errors';
 
 const router: Router = new Router;
 
@@ -34,11 +34,15 @@ router.get('/member/:member_token', async function(ctx: SysTypes.ExtendedRouterC
 
   if (!memberToken) throw new ParameterValidationError('member_token');
 
-  let member: Member = await MemberModel.getMember(1);
+  let memberNo: number = await Credential.decryptMemberToken(memberToken);
+  if (memberNo === null) {
+    throw new InvalidCredentialError();
+  }
+
+  let member: Member = await MemberModel.getMember(memberNo);
   if (!member) {
     //TODO: throw exception
   }
-
   ctx.sendApiSuccess(member);
 });
 
