@@ -5,7 +5,7 @@ import log from '../loggers';
 
 export const MemberModel = {
   
-  insertNewMember: async function (member: ReqMemberCreate): Promise<number> {
+  insertNewMember: async function(member: ReqMemberCreate): Promise<number> {
     let query: string = 
     `
       INSERT INTO 

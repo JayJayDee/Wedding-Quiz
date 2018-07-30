@@ -37,7 +37,8 @@ export interface DatabaseOperation {
 }
 
 const db: DatabaseOperation = {
-  query: function (query: string, param?: any[]) {
+
+  query: function(query: string, param?: any[]) {
     return new Promise((resolve: Function, reject: Function) => {
       accquireConnection()
       .then((connection: PoolConnection) => {

@@ -11,4 +11,9 @@ export interface ReqMemberCreate {
   phone: string;
 }
 
+export interface ReqPickQuiz {
+  member_no: number;
+}
+
 export { MemberModel } from './member-model';
+export { QuizPoolModel } from './quiz-pool-model';
