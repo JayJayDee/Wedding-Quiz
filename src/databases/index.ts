@@ -4,6 +4,7 @@ import * as mysql from 'mysql';
 import * as configs from '../configs';
 import log from '../loggers';
 import { PoolConnection } from 'mysql';
+import { resolve } from 'path';
 
 const connectionPool: mysql.Pool = mysql.createPool({
   connectionLimit: configs.config.mysql.poolSize,
@@ -35,6 +36,26 @@ export interface DatabaseOperation {
   transaction(): Promise<TransactionExecutor>;
 }
 
+const transExecutor: TransactionExecutor = {
+  query: function(query: string, param?: any[]): Promise<any> {
+    return new Promise((resolve: Function, reject: Function) => {
+
+    });
+  },
+
+  commit: function(): Promise<any> {
+    return new Promise((resolve: Function, reject: Function) => {
+
+    });
+  },
+
+  rollback: function(): Promise<any> {
+    return new Promise((resolve: Function, reject: Function) => {
+
+    });
+  }
+}
+
 const db: DatabaseOperation = {
   query: function (query: string, param?: any[]) {
     return new Promise((resolve: Function, reject: Function) => {
@@ -59,7 +80,7 @@ const db: DatabaseOperation = {
     return new Promise((resolve: Function, reject: Function) => {
       accquireConnection()
       .then((connection: PoolConnection) => {
-        //TODO: to be implemented. 
+        
       })
       .catch((err: mysql.MysqlError) => {
         //TODO: to be implemented
