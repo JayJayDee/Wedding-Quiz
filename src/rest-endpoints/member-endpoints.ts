@@ -6,7 +6,7 @@ import * as Credential from '../utils/credential';
 import log from '../loggers';
 
 import { MemberModel, Member, ReqMemberCreate } from '../models';
-import { ParameterValidationError, InvalidCredentialError } from './errors';
+import { ParameterValidationError, InvalidCredentialError, ObjectNotFoundError } from './errors';
 
 const router: Router = new Router;
 
@@ -41,7 +41,7 @@ router.get('/member/:member_token', async function(ctx: SysTypes.ExtendedRouterC
 
   let member: Member = await MemberModel.getMember(memberNo);
   if (!member) {
-    //TODO: throw exception
+    throw new ObjectNotFoundError(`member[${memberToken}]`);
   }
   ctx.sendApiSuccess(member);
 });

@@ -13,9 +13,14 @@ export interface QuizQuestion {
   content: string;
   type: QuestionType;
 }
-export interface QuizAnswer {
+export interface QuizChoice {
   no: number;
   content: string;
+}
+export interface Quiz {
+  difficulty: number;
+  questions: QuizQuestion[];
+  choices: QuizChoice[];
 }
 
 export interface ReqMemberCreate { 

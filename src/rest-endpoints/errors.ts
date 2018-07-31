@@ -19,3 +19,9 @@ export class InvalidCredentialError extends BaseLogicalError {
     super('INVALID_CREDENTIAL', 'supplied credential was not valid.');
   }
 }
+
+export class ObjectNotFoundError extends BaseLogicalError {
+  constructor(entityName: string) {
+    super('OBJECT_NOT_FOUND', `${entityName} was not found`);
+  }
+}
