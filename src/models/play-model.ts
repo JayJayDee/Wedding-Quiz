@@ -4,9 +4,16 @@ import * as _ from 'lodash';
 import db, { TransactionExecutor } from '../databases';
 import { config } from '../configs';
 import { QuizPoolModel } from './quiz-pool-model';
-import { Quiz, ReqSolveQuiz, ResSolveQuiz, InvalidMemberStatusError, QuizSolveFailError } from '.';
+import { Quiz, ReqSolveQuiz, ResSolveQuiz, InvalidMemberStatusError, QuizSolveFailError, QuizInvalidChoiceError } from '.';
+import { AllQuizPlayedError } from '../rest-endpoints/errors';
 import log from '../loggers';
-import { BaseLogicalError, AllQuizPlayedError } from '../rest-endpoints/errors';
+
+interface CorrectChoice {
+  choice_no: number;
+  quiz_no: number;
+  play_no: number;
+  content: string;
+}
 
 export const PlayModel = {
 
@@ -74,68 +81,106 @@ export const PlayModel = {
     let trans: TransactionExecutor = await db.transaction();
     
     try {
-      let query: string = 
+      //0. get user choices
+      let verifyQuery: string = 
       `
         SELECT 
+          c.no AS choice_no,
+          c.is_answer,
           c.quiz_no,
-          qpno.play_no,
-          IF(c.is_answer=1 AND c.no=?, 1, 0) AS is_win,
-          rc.content AS correct_answer
+          qno.play_no,
+          c.content
         FROM 
           wedd_quiz_choice c 
         INNER JOIN 
-          (SELECT 
-            quiz_no,
-            no AS play_no
-          FROM 
-            wedd_quiz_play qp
-          WHERE 
-            qp.member_no=? AND 
-            qp.is_played=0
-          ORDER BY 
-            seq ASC 
-          LIMIT 1) AS qpno 
-          ON c.quiz_no=qpno.quiz_no
-        INNER JOIN 
-          wedd_quiz_choice rc 
-          ON rc.quiz_no=c.quiz_no AND rc.is_answer=1 
-        WHERE 
-          c.no=?
+          (
+            SELECT 
+              quiz_no,
+              no AS play_no
+            FROM 
+              wedd_quiz_play 
+            WHERE 
+              is_played=0 AND 
+              member_no=?
+            ORDER BY 
+              seq ASC 
+            LIMIT 1
+          ) AS qno
+          ON c.quiz_no=qno.quiz_no 
       `;
-      let params: any[] = [solve.choice_no, solve.member_no, solve.choice_no];
-      let correctResp: any[] = await trans.query(query, params);
-      if (correctResp.length === 0) {
+      let params: any[] = [solve.member_no];
+      let rows: any[] = await trans.query(verifyQuery, params);
+      
+      //1. check user-choice was invalid 
+      if (rows.length === 0) {
         throw new AllQuizPlayedError();
       }
-      let correctness: any = correctResp[0];
-      
-      query = 
+      if (!_.find(rows, (elem) => elem.choice_no == solve.choice_no)) {
+        throw new QuizInvalidChoiceError(solve.choice_no);
+      }
+
+      //2. check is user-choice was correct
+      let rawCorrect: any = _.find(rows, (row: any) => row.is_answer === 1);
+      let correct: CorrectChoice = {
+        choice_no: rawCorrect.choice_no,
+        quiz_no: rawCorrect.quiz_no,
+        play_no: rawCorrect.play_no,
+        content: rawCorrect.content
+      };
+
+      let isWin: boolean = false;
+      if (correct.choice_no == solve.choice_no) isWin = true;
+
+      //3. update result 
+      let updateQuery = 
       `
         UPDATE 
           wedd_quiz_play 
         SET 
+          selected_choice_no=?,
           is_played=1,
-          is_win=?,
-          selected_choice_no=?
+          is_win=?
         WHERE 
-          is_played=0 AND 
-          selected_choice_no IS NULL AND
-          no=?
+          no=? AND 
+          selected_choice_no IS NULL AND 
+          is_played=0
       `;
-      params = [correctness.is_win, solve.choice_no, correctness.play_no];
-      let resp = await trans.query(query, params);
+      let isWinInt: number = 0;
+      if (isWin) isWinInt = 1;
+      params = [solve.choice_no, isWinInt, correct.play_no];
+      let resp: any = await trans.query(updateQuery, params);
+      
       if (resp.affectedRows !== 1) {
-        throw new QuizSolveFailError(`failed to solve quiz:${correctness.quiz_no}`);
+        throw new QuizSolveFailError('failed to process solve request');
       }
+
+      //4. check is all quiz ended
+      let endCheckQuery = 
+      `
+        SELECT 
+          SUM(IF(is_played=1, 1, 0)) AS played_count,
+          COUNT(no) AS all_count 
+        FROM 
+          wedd_quiz_play 
+        WHERE 
+          member_no=? 
+      `;
+      params = [solve.member_no];
+      resp = await trans.query(endCheckQuery, params);
+
+      let isEnded: boolean = false;
+      if (resp[0].played_count === resp[0].all_count) {
+        isEnded = true;
+      }
+
+      //5. transaction commit
       await trans.commit();
 
-      let isWin = false;
-      if (correctness.is_win === 1) isWin = true;
-
+      //6. write result 
       let result: ResSolveQuiz = {
         is_win: isWin,
-        is_ended: false, //TODO: must be calculated in query
-        correct_answer: correctness.correct_answer
+        is_ended: isEnded,
+        correct_answer: correct.content
       };
       return result;
 

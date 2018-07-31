@@ -12,6 +12,12 @@ export class QuizSolveFailError extends BaseLogicalError {
   }
 }
 
+export class QuizInvalidChoiceError extends BaseLogicalError {
+  constructor(choiceNo: number) {
+    super('INVALID_CHOICE', `invalid choice for choice_no:${choiceNo}`);
+  }
+}
+
 export interface Member {
   member_token: string;
   name: string;

@@ -8,6 +8,7 @@ import { DefaultTransactionExecutor } from './default-trans-executor';
 
 const connectionPool: mysql.Pool = mysql.createPool({
   connectionLimit: configs.config.mysql.poolSize,
+  port: configs.config.mysql.port,
   host: configs.config.mysql.host,
   user: configs.config.mysql.user,
   password: configs.config.mysql.password,

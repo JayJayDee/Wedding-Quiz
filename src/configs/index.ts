@@ -12,6 +12,7 @@ export interface HttpConfig {
 export interface MysqlConfig {
   host: string;
   user: string;
+  port: number;
   password: string;
   database: string;
   poolSize: number;
