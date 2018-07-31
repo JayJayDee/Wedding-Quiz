@@ -16,13 +16,14 @@ router.get('/member/:member_token/quiz', async (ctx: ExtendedRouterContext) => {
   if (!memberNo) throw new InvalidCredentialError();
 
   let quiz: Quiz = await PlayModel.getPlayableQuiz(memberNo);
-  return ctx.sendApiSuccess(quiz);
+  ctx.sendApiSuccess(quiz);
 });
 
 router.post('/member/:member_token/solve', async (ctx: ExtendedRouterContext) => {
   let memberToken: string = ctx.params['member_token'];
   let choiceNo: number = ctx.request.body['choice_no'];
   if (!memberToken) throw new ParameterValidationError('member_token');
+  if (!choiceNo) throw new ParameterValidationError('choice_no');
 
   let memberNo: number = await Credential.decryptMemberToken(memberToken);
   if (!memberNo) throw new InvalidCredentialError();
@@ -32,7 +33,7 @@ router.post('/member/:member_token/solve', async (ctx: ExtendedRouterContext) =>
     choice_no: choiceNo
   };
   let solveResult: ResSolveQuiz = await PlayModel.solveQuiz(solveReqParam);
-  return ctx.sendApiSuccess(solveResult);
+  ctx.sendApiSuccess(solveResult);
 });
 
 export default router;

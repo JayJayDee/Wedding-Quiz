@@ -15,7 +15,7 @@ export interface QuizQuestion {
   type: QuestionType;
 }
 export interface QuizChoice {
-  no: number;
+  choice_no: number;
   content: string;
 }
 export interface Quiz {
@@ -34,6 +34,7 @@ export interface ReqSolveQuiz {
 }
 export interface ResSolveQuiz {
   is_correct: boolean;
+  ended: boolean;
   right_choice: string;
 }
 

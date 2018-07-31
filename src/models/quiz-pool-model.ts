@@ -63,7 +63,7 @@ export const QuizPoolModel = {
     
     let choices: QuizChoice[] = _.map(rows, (elem: any) => {
       return {
-        no: elem['no'],
+        choice_no: elem['no'],
         content: elem['content']
       };
     });

@@ -70,13 +70,37 @@ export const PlayModel = {
     let trans: TransactionExecutor = await db.transaction();
     
     try {
-      let resp = await trans.query('INSERT INTO wedd_test SET test_value=1');
-      console.log(resp);
-      
-      resp = await trans.query('SELECT COUNT(no) AS cnt FROM wedd_test');
-      console.log(resp);
+      let query: string = 
+      `
+        SELECT 
+          c.quiz_no,
+          qpno.play_no
+        FROM 
+          wedd_quiz_choice c 
+        INNER JOIN 
+          (SELECT 
+            quiz_no,
+            no AS play_no
+          FROM 
+            wedd_quiz_play qp
+          WHERE 
+            qp.member_no=? AND 
+            qp.is_played=0
+          ORDER BY 
+            seq ASC 
+          LIMIT 1) AS qpno 
+          ON c.quiz_no=qpno.quiz_no
+        WHERE 
+          c.is_answer=1 AND 
+          c.no=?
+      `;
+      let params: any[] = [solve.member_no, solve.choice_no];
+      let correctResp: any[] = await trans.query(query, params);
+      let isCorrect = true;
+      if (correctResp.length === 0) isCorrect = false;
 
-      throw new BaseLogicalError('TEST_ERROR', 'test-message');
+      //TODO: write solve result.
+
       await trans.commit();
     } catch (err) {
       await trans.rollback();
