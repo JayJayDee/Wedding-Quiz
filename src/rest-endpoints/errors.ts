@@ -25,3 +25,9 @@ export class ObjectNotFoundError extends BaseLogicalError {
     super('OBJECT_NOT_FOUND', `${entityName} was not found`);
   }
 }
+
+export class AllQuizPlayedError extends BaseLogicalError {
+  constructor() {
+    super('ALL_QUIZ_PLAYED', `all quiz played`);
+  }
+}

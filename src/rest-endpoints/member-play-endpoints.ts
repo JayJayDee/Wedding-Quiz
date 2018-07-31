@@ -3,7 +3,7 @@ import * as Router from 'koa-router';
 
 import { ExtendedRouterContext } from '../types/sys-types';
 import { PlayModel, Quiz, ResSolveQuiz, ReqSolveQuiz } from '../models';
-import { ParameterValidationError, InvalidCredentialError } from './errors';
+import { ParameterValidationError, InvalidCredentialError, AllQuizPlayedError } from './errors';
 import * as Credential from '../utils/credential';
 
 const router = new Router();
@@ -16,6 +16,9 @@ router.get('/member/:member_token/quiz', async (ctx: ExtendedRouterContext) => {
   if (!memberNo) throw new InvalidCredentialError();
 
   let quiz: Quiz = await PlayModel.getPlayableQuiz(memberNo);
+  if (quiz === null) {
+    throw new AllQuizPlayedError();
+  }
   ctx.sendApiSuccess(quiz);
 });
 
