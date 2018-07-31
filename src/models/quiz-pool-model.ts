@@ -5,6 +5,22 @@ import db from '../databases';
 import { ReqPickQuiz, QuizQuestion, QuestionType, QuizChoice, Quiz } from './index';
 
 export const QuizPoolModel = {
+
+  getQuizNos: async function(): Promise<number[]> {
+    let query: string = 
+    `
+      SELECT 
+        no
+      FROM 
+        wedd_quiz_pool
+      ORDER BY 
+        no ASC 
+    `;
+    let rows: any[] = await db.query(query);
+    return _.map(rows, (elem: any) => {
+      return elem['no'];
+    });
+  },
   
   getQuiz: async function(quizNo: number): Promise<Quiz> {
     let query: string = 

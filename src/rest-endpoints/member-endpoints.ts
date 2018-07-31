@@ -3,9 +3,8 @@ import * as Router from 'koa-router';
 
 import * as SysTypes from '../types/sys-types';
 import * as Credential from '../utils/credential';
-import log from '../loggers';
 
-import { MemberModel, Member, ReqMemberCreate } from '../models';
+import { MemberModel, Member, ReqMemberCreate, PlayModel } from '../models';
 import { ParameterValidationError, InvalidCredentialError, ObjectNotFoundError } from './errors';
 
 const router: Router = new Router;
@@ -24,6 +23,9 @@ router.post('/member', async function(ctx: SysTypes.ExtendedRouterContext) {
 
   let memberNo: number = await MemberModel.insertNewMember(param);
   let memberToken: string = await Credential.generateMemberToken(memberNo);
+
+  await PlayModel.generateQuizPlay(memberNo);
+
   ctx.sendApiSuccess({
     member_token: memberToken
   });

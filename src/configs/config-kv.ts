@@ -12,6 +12,7 @@ const configMappers = {
   'MYSQL_DATABASE': (root: RootConfig, value: any) => root.mysql.database = value,
   'MYSQL_POOLSIZE': (root: RootConfig, value: any) => root.mysql.poolSize = value,
   'SERVER_KEY': (root: RootConfig, value: any) => root.credential.serverKey = value,
+  'QUIZ_PER_MEMBER': (root: RootConfig, value: any) => root.play.numQuizPerMember = value,
 };
 
 export function configKeys(): Array<string> {
@@ -37,6 +38,9 @@ export function map(rawConfigMap: { [key: string]: string | number}): RootConfig
     },
     credential: {
       serverKey: null
+    },
+    play: {
+      numQuizPerMember: null
     }
   };
   _.each(Object.keys(configMappers), (key: string) => {

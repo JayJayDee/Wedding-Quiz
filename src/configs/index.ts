@@ -6,17 +6,18 @@ import fileConfReader from './file-conf-reader';
 export interface CredentialConfig {
   serverKey: string;
 }
-
 export interface HttpConfig {
   port: number; 
 }
-
 export interface MysqlConfig {
   host: string;
   user: string;
   password: string;
   database: string;
   poolSize: number;
+}
+export interface PlayConfig {
+  numQuizPerMember: number;
 }
 
 export enum AppEnv {
@@ -28,6 +29,7 @@ export interface RootConfig {
   http: HttpConfig;
   mysql: MysqlConfig;
   credential: CredentialConfig;
+  play: PlayConfig;
 }
 
 export interface ConfigReader {
