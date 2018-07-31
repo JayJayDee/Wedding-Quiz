@@ -13,10 +13,13 @@ export const PlayModel = {
     let params: any[] = [];
 
     let quizNos: number[] = await QuizPoolModel.getQuizNos();
-    //TODO: pick quizNos randomly.
-
+    
     for (let i = 0; i < numQuizPerMember; i++) {
+      let randIdx = Math.floor(Math.random() * (quizNos.length - 1));
+      let value = quizNos[randIdx];
+      quizNos = _.without(quizNos, quizNos[randIdx]);
       queryArr.push('(?,?,?,0,0)');
+      params.push(value, memberNo, i);
     }
 
     let query: string = 
@@ -27,6 +30,7 @@ export const PlayModel = {
       VALUES 
         ${queryArr.join(',')}
     `; 
-    
-  }
+    return await db.query(query, params);
+  },
+
 }

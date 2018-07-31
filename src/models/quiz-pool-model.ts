@@ -18,7 +18,7 @@ export const QuizPoolModel = {
     `;
     let rows: any[] = await db.query(query);
     return _.map(rows, (elem: any) => {
-      return elem['no'];
+      return elem.no;
     });
   },
   
