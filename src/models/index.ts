@@ -34,3 +34,4 @@ export interface ReqPickQuiz {
 
 export { MemberModel } from './member-model';
 export { QuizPoolModel } from './quiz-pool-model';
+export { PlayModel } from './play-model';
