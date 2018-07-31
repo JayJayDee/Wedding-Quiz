@@ -6,7 +6,7 @@ import { config } from '../configs';
 import { QuizPoolModel } from './quiz-pool-model';
 import { Quiz, ReqSolveQuiz, ResSolveQuiz, InvalidMemberStatusError, QuizSolveFailError } from '.';
 import log from '../loggers';
-import { BaseLogicalError } from '../rest-endpoints/errors';
+import { BaseLogicalError, AllQuizPlayedError } from '../rest-endpoints/errors';
 
 export const PlayModel = {
 
@@ -105,7 +105,7 @@ export const PlayModel = {
       let params: any[] = [solve.choice_no, solve.member_no, solve.choice_no];
       let correctResp: any[] = await trans.query(query, params);
       if (correctResp.length === 0) {
-        throw new InvalidMemberStatusError('member status was invalid');
+        throw new AllQuizPlayedError();
       }
       let correctness: any = correctResp[0];
       
