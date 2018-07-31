@@ -19,4 +19,15 @@ router.get('/member/:member_token/quiz', async (ctx: ExtendedRouterContext) => {
   return ctx.sendApiSuccess(quiz);
 });
 
+router.post('/member/:member_token/solve', async (ctx: ExtendedRouterContext) => {
+  let memberToken: string = ctx.params['member_token'];
+  let choiceNo: number = ctx.request.body['choice_no'];
+  if (!memberToken) throw new ParameterValidationError('member_token');
+
+  let memberNo: number = await Credential.decryptMemberToken(memberToken);
+  if (!memberNo) throw new InvalidCredentialError();
+
+  
+});
+
 export default router;

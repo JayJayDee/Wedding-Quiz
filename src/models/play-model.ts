@@ -4,7 +4,7 @@ import * as _ from 'lodash';
 import db from '../databases';
 import { config } from '../configs';
 import { QuizPoolModel } from './quiz-pool-model';
-import { Quiz } from '.';
+import { Quiz, ReqSolveQuiz, ResSolveQuiz } from '.';
 
 export const PlayModel = {
 
@@ -62,5 +62,9 @@ export const PlayModel = {
 
     let quizNo: number = rows[0].no;
     return await QuizPoolModel.getQuiz(quizNo);
+  },
+
+  solveQuiz: async function(solve: ReqSolveQuiz): Promise<ResSolveQuiz> {
+    return null;
   }
 }

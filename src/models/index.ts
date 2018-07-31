@@ -28,8 +28,13 @@ export interface ReqMemberCreate {
   name: string;
   phone: string;
 }
-export interface ReqPickQuiz {
+export interface ReqSolveQuiz {
   member_no: number;
+  choice_no: number;
+}
+export interface ResSolveQuiz {
+  is_correct: boolean;
+  right_choice: string;
 }
 
 export { MemberModel } from './member-model';

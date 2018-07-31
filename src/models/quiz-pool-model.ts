@@ -2,7 +2,7 @@
 import * as _ from 'lodash';
 
 import db from '../databases';
-import { ReqPickQuiz, QuizQuestion, QuestionType, QuizChoice, Quiz } from './index';
+import { QuizQuestion, QuestionType, QuizChoice, Quiz } from './index';
 
 export const QuizPoolModel = {
 
