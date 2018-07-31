@@ -6,6 +6,7 @@ import { config } from '../configs';
 import { QuizPoolModel } from './quiz-pool-model';
 import { Quiz, ReqSolveQuiz, ResSolveQuiz } from '.';
 import log from '../loggers';
+import { BaseLogicalError } from '../rest-endpoints/errors';
 
 export const PlayModel = {
 
@@ -69,12 +70,19 @@ export const PlayModel = {
     let trans: TransactionExecutor = await db.transaction();
     
     try {
+      let resp = await trans.query('INSERT INTO wedd_test SET test_value=1');
+      console.log(resp);
       
-    } catch (err) {
-      trans.rollback();
-      log.error(err);
-    }
+      resp = await trans.query('SELECT COUNT(no) AS cnt FROM wedd_test');
+      console.log(resp);
 
+      throw new BaseLogicalError('TEST_ERROR', 'test-message');
+      await trans.commit();
+    } catch (err) {
+      await trans.rollback();
+      log.error(err);
+      throw err;
+    }
     return null;
   }
 }

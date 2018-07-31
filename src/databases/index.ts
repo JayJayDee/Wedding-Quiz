@@ -67,8 +67,13 @@ const db: DatabaseOperation = {
     return new Promise((resolve: Function, reject: Function) => {
       accquireConnection()
       .then((connection: PoolConnection) => {
-        let executor: TransactionExecutor = new DefaultTransactionExecutor(connection);
-        return resolve(executor);
+        connection.beginTransaction((err: mysql.MysqlError) => {
+          if (err) {
+            return reject(err);
+          }
+          let executor: TransactionExecutor = new DefaultTransactionExecutor(connection);
+          return resolve(executor);
+        }); 
       })
       .catch((err: mysql.MysqlError) => {
         return reject(err);

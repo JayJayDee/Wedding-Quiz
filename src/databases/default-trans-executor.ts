@@ -33,8 +33,10 @@ export class DefaultTransactionExecutor implements TransactionExecutor {
       }
       this.connection.commit((err: MysqlError) => {
         if (err) {
+          this.connection.release();
           return reject(err);
         }
+        this.connection.release();
         this.ended = true;
         return resolve();
       });
@@ -48,8 +50,10 @@ export class DefaultTransactionExecutor implements TransactionExecutor {
       }
       this.connection.rollback((err: MysqlError) => {
         if (err) {
+          this.connection.release();
           return reject(err);
         }
+        this.connection.release();
         this.ended = true;
         return resolve();
       });
