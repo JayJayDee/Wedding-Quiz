@@ -2,12 +2,36 @@
 import * as _ from 'lodash';
 
 import db from '../databases';
-import { ReqPickQuiz, QuizQuestion, QuestionType } from './index';
+import { ReqPickQuiz, QuizQuestion, QuestionType, QuizChoice } from './index';
 
 export const QuizPoolModel = {
   
   pickQuizFromPool: async function(pick: ReqPickQuiz) {
 
+  },
+
+  getQuizChoices: async function(quizNo: number): Promise<QuizChoice[]> {
+    let query: string = 
+    `
+      SELECT 
+        *
+      FROM 
+        wedd_quiz_choice
+      WHERE 
+        quiz_no=?
+      ORDER BY 
+        seq ASC 
+    `;
+    let params: any[] = [quizNo];
+    let rows: any[] = await db.query(query, params);
+    
+    let choices: QuizChoice[] = _.map(rows, (elem: any) => {
+      return {
+        no: elem['no'],
+        content: elem['content']
+      };
+    });
+    return choices;
   },
 
   getQuizQuestions: async function(quizNo: number): Promise<QuizQuestion[]> {
