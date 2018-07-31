@@ -4,7 +4,7 @@ import * as _ from 'lodash';
 import db, { TransactionExecutor } from '../databases';
 import { config } from '../configs';
 import { QuizPoolModel } from './quiz-pool-model';
-import { Quiz, ReqSolveQuiz, ResSolveQuiz } from '.';
+import { Quiz, ReqSolveQuiz, ResSolveQuiz, InvalidMemberStatusError } from '.';
 import log from '../loggers';
 import { BaseLogicalError } from '../rest-endpoints/errors';
 
@@ -74,7 +74,8 @@ export const PlayModel = {
       `
         SELECT 
           c.quiz_no,
-          qpno.play_no
+          qpno.play_no,
+          IF(c.is_answer=1 AND c.no=?, 1, 0) AS is_correct
         FROM 
           wedd_quiz_choice c 
         INNER JOIN 
@@ -91,14 +92,30 @@ export const PlayModel = {
           LIMIT 1) AS qpno 
           ON c.quiz_no=qpno.quiz_no
         WHERE 
-          c.is_answer=1 AND 
           c.no=?
       `;
-      let params: any[] = [solve.member_no, solve.choice_no];
+      let params: any[] = [solve.choice_no, solve.member_no, solve.choice_no];
       let correctResp: any[] = await trans.query(query, params);
-      let isCorrect = true;
-      if (correctResp.length === 0) isCorrect = false;
+      if (correctResp.length === 0) {
+        throw new InvalidMemberStatusError('member status was invalid');
+      }
+      let correctness: any = correctResp[0];
+      
+      //TODO: should be show result when incorrect 
 
+      query = 
+      `
+        UPDATE 
+          wedd_quiz_play 
+        SET 
+          is_played=1,
+          is_win=?,
+          selected_choice_no=?,
+        WHERE 
+          is_played=0 AND 
+          selceted_choice_no IS NULL AND 
+
+      `;
       //TODO: write solve result.
 
       await trans.commit();

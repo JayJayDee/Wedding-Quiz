@@ -1,3 +1,10 @@
+import { BaseLogicalError } from '../rest-endpoints/errors';
+
+export class InvalidMemberStatusError extends BaseLogicalError {
+  constructor(detail: string) {
+    super('INVALID_MEMBER_STATUS', detail);
+  }
+}
 
 export interface Member {
   member_token: string;
