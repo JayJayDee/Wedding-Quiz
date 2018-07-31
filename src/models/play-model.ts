@@ -1,10 +1,11 @@
 
 import * as _ from 'lodash';
 
-import db from '../databases';
+import db, { TransactionExecutor } from '../databases';
 import { config } from '../configs';
 import { QuizPoolModel } from './quiz-pool-model';
 import { Quiz, ReqSolveQuiz, ResSolveQuiz } from '.';
+import log from '../loggers';
 
 export const PlayModel = {
 
@@ -65,6 +66,15 @@ export const PlayModel = {
   },
 
   solveQuiz: async function(solve: ReqSolveQuiz): Promise<ResSolveQuiz> {
+    let trans: TransactionExecutor = await db.transaction();
+    
+    try {
+      
+    } catch (err) {
+      trans.rollback();
+      log.error(err);
+    }
+
     return null;
   }
 }

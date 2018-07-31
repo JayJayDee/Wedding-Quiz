@@ -2,7 +2,7 @@
 import * as Router from 'koa-router';
 
 import { ExtendedRouterContext } from '../types/sys-types';
-import { PlayModel, Quiz } from '../models';
+import { PlayModel, Quiz, ResSolveQuiz, ReqSolveQuiz } from '../models';
 import { ParameterValidationError, InvalidCredentialError } from './errors';
 import * as Credential from '../utils/credential';
 
@@ -27,7 +27,12 @@ router.post('/member/:member_token/solve', async (ctx: ExtendedRouterContext) =>
   let memberNo: number = await Credential.decryptMemberToken(memberToken);
   if (!memberNo) throw new InvalidCredentialError();
 
-  
+  let solveReqParam: ReqSolveQuiz = {
+    member_no: memberNo,
+    choice_no: choiceNo
+  };
+  let solveResult: ResSolveQuiz = await PlayModel.solveQuiz(solveReqParam);
+  return ctx.sendApiSuccess(solveResult);
 });
 
 export default router;

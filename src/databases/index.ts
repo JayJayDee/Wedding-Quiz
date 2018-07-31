@@ -25,6 +25,12 @@ function accquireConnection(): Promise<PoolConnection> {
   });
 }
 
+export class InvalidTransactionError extends Error {
+  constructor(msg: string) {
+    super(msg);
+  }
+}
+
 export interface TransactionExecutor {
   query(query: string, param?: any[]): Promise<any>;
   commit(): Promise<any>;
