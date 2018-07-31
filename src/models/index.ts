@@ -6,6 +6,12 @@ export class InvalidMemberStatusError extends BaseLogicalError {
   }
 }
 
+export class QuizSolveFailError extends BaseLogicalError {
+  constructor(detail: string) {
+    super('QUIZ_SOLVE_FAIL', detail);
+  }
+}
+
 export interface Member {
   member_token: string;
   name: string;
@@ -40,9 +46,9 @@ export interface ReqSolveQuiz {
   choice_no: number;
 }
 export interface ResSolveQuiz {
-  is_correct: boolean;
-  ended: boolean;
-  right_choice: string;
+  is_win: boolean;
+  is_ended: boolean;
+  correct_answer: string;
 }
 
 export { MemberModel } from './member-model';
