@@ -139,7 +139,8 @@ export const PlayModel = {
         SET 
           selected_choice_no=?,
           is_played=1,
-          is_win=?
+          is_win=?,
+          played_date=NOW()
         WHERE 
           no=? AND 
           selected_choice_no IS NULL AND 
