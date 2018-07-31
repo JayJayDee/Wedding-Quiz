@@ -6,7 +6,8 @@ export interface Member {
   regDate?: Date;
 }
 export enum QuestionType {
-  TEXT = 'TEXT', IMAGE = 'IMAGE'
+  TEXT = 'TEXT',
+  IMAGE = 'IMAGE'
 }
 export interface QuizQuestion {
   no: number;

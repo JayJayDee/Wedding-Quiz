@@ -2,12 +2,32 @@
 import * as _ from 'lodash';
 
 import db from '../databases';
-import { ReqPickQuiz, QuizQuestion, QuestionType, QuizChoice } from './index';
+import { ReqPickQuiz, QuizQuestion, QuestionType, QuizChoice, Quiz } from './index';
 
 export const QuizPoolModel = {
   
-  pickQuizFromPool: async function(pick: ReqPickQuiz) {
+  getQuiz: async function(quizNo: number): Promise<Quiz> {
+    let query: string = 
+    `
+      SELECT 
+        *
+      FROM 
+        wedd_quiz_pool
+      WHERE 
+        no=? 
+    `;
+    let params: any[] = [quizNo];
+    let rows: any[] = await db.query(query, params);
 
+    if (rows.length === 0) {
+      return null;
+    }
+    let quiz: Quiz = {
+      difficulty: rows[0]['difficulty'],
+      choices: await this.getQuizChoices(quizNo),
+      questions: await this.getQuizQuestions(quizNo) 
+    };
+    return quiz;
   },
 
   getQuizChoices: async function(quizNo: number): Promise<QuizChoice[]> {
@@ -51,8 +71,8 @@ export const QuizPoolModel = {
 
     let questions: QuizQuestion[] = _.map(rows, (elem: any) => {
       let type: QuestionType = null;
-      if (elem.type === 'TEXT') type = QuestionType.TEXT;
-      else if (elem.type === 'IMAGE') type = QuestionType.IMAGE;
+      if (elem['question_type'] === 'TEXT') type = QuestionType.TEXT;
+      else if (elem['question_type'] === 'IMAGE') type = QuestionType.IMAGE;
       return {
         no: elem['no'],
         type: type,
