@@ -4,7 +4,7 @@ import * as _ from 'lodash';
 import db, { TransactionExecutor } from '../databases';
 import { config } from '../configs';
 import { QuizPoolModel } from './quiz-pool-model';
-import { Quiz, ReqSolveQuiz, ResSolveQuiz, InvalidMemberStatusError, QuizSolveFailError, QuizInvalidChoiceError } from '.';
+import { Quiz, ReqSolveQuiz, ResSolveQuiz, InvalidMemberStatusError, QuizSolveFailError, QuizInvalidChoiceError, QuizStatus } from '.';
 import { AllQuizPlayedError } from '../rest-endpoints/errors';
 import log from '../loggers';
 
@@ -17,8 +17,35 @@ interface CorrectChoice {
 
 export const PlayModel = {
 
-  getSolveStatus: async function(memberNo: number): Promise<void> {
+  getQuizPlayStatus: async function(memberNo: number): Promise<QuizStatus> {
+    let query: string = 
+    `
+      SELECT 
+        COUNT(no) AS num_all_quiz,
+        SUM(IF(is_played=1 AND is_win=1, 1, 0)) AS num_correct,
+        SUM(IF(is_played=1 AND is_win=0, 1, 0)) AS num_incorrect,
+        SUM(IF(is_played=1, 1, 0)) AS num_played
+      FROM 
+        wedd_quiz_play 
+      WHERE 
+        member_no=?
+    `;
+    let params: any[] = [memberNo];
+    let rows: any[] = await db.query(query, params);
+    let rawResp: any = rows[0];
+    
+    let status: QuizStatus = {
+      num_all_quiz: rawResp.num_all_quiz,
+      num_played: rawResp.num_played,
+      num_correct: rawResp.num_correct,
+      num_incorrect: rawResp.num_incorrect,
+      is_ended: false
+    };
 
+    if (status.num_played === status.num_all_quiz) {
+      status.is_ended = true;
+    }
+    return status;
   },
 
   generateQuizPlay: async function(memberNo: number): Promise<void> {
@@ -155,32 +182,12 @@ export const PlayModel = {
         throw new QuizSolveFailError('failed to process solve request');
       }
 
-      //4. check is all quiz ended
-      let endCheckQuery = 
-      `
-        SELECT 
-          SUM(IF(is_played=1, 1, 0)) AS played_count,
-          COUNT(no) AS all_count 
-        FROM 
-          wedd_quiz_play 
-        WHERE 
-          member_no=? 
-      `;
-      params = [solve.member_no];
-      resp = await trans.query(endCheckQuery, params);
-
-      let isEnded: boolean = false;
-      if (resp[0].played_count === resp[0].all_count) {
-        isEnded = true;
-      }
-
       //5. transaction commit
       await trans.commit();
 
       //6. write result 
       let result: ResSolveQuiz = {
         is_win: isWin,
-        is_ended: isEnded,
         correct_answer: correct.content
       };
       return result;

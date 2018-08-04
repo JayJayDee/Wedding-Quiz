@@ -2,7 +2,7 @@
 import * as Router from 'koa-router';
 
 import { ExtendedRouterContext } from '../types/sys-types';
-import { PlayModel, Quiz, ResSolveQuiz, ReqSolveQuiz } from '../models';
+import { PlayModel, Quiz, ResSolveQuiz, ReqSolveQuiz, QuizStatus } from '../models';
 import { ParameterValidationError, InvalidCredentialError, AllQuizPlayedError } from './errors';
 import * as Credential from '../utils/credential';
 
@@ -19,7 +19,12 @@ router.get('/member/:member_token/quiz', async (ctx: ExtendedRouterContext) => {
   if (quiz === null) {
     throw new AllQuizPlayedError();
   }
-  ctx.sendApiSuccess(quiz);
+  let playStatus: QuizStatus = await PlayModel.getQuizPlayStatus(memberNo);
+
+  ctx.sendApiSuccess({
+    quiz: quiz,
+    play: playStatus
+  });
 });
 
 router.post('/member/:member_token/solve', async (ctx: ExtendedRouterContext) => {
@@ -36,7 +41,12 @@ router.post('/member/:member_token/solve', async (ctx: ExtendedRouterContext) =>
     choice_no: choiceNo
   };
   let solveResult: ResSolveQuiz = await PlayModel.solveQuiz(solveReqParam);
-  ctx.sendApiSuccess(solveResult);
+  let playStatus: QuizStatus = await PlayModel.getQuizPlayStatus(memberNo);
+
+  ctx.sendApiSuccess({
+    result: solveResult,
+    play: playStatus
+  });
 });
 
 export default router;

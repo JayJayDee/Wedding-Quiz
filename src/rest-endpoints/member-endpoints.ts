@@ -4,7 +4,7 @@ import * as Router from 'koa-router';
 import * as SysTypes from '../types/sys-types';
 import * as Credential from '../utils/credential';
 
-import { MemberModel, Member, ReqMemberCreate, PlayModel } from '../models';
+import { MemberModel, Member, ReqMemberCreate, PlayModel, QuizStatus } from '../models';
 import { ParameterValidationError, InvalidCredentialError, ObjectNotFoundError } from './errors';
 
 const router: Router = new Router;
@@ -45,7 +45,12 @@ router.get('/member/:member_token', async function(ctx: SysTypes.ExtendedRouterC
   if (!member) {
     throw new ObjectNotFoundError(`member[${memberToken}]`);
   }
-  ctx.sendApiSuccess(member);
+
+  let playStatus: QuizStatus = await PlayModel.getQuizPlayStatus(memberNo);
+  ctx.sendApiSuccess({
+    member: member,
+    play: playStatus
+  });
 });
 
 export default router;

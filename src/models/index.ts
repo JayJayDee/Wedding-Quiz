@@ -28,6 +28,13 @@ export enum QuestionType {
   TEXT = 'TEXT',
   IMAGE = 'IMAGE'
 }
+export interface QuizStatus {
+  num_all_quiz: number;
+  num_played: number;
+  num_correct: number;
+  num_incorrect: number;
+  is_ended: boolean;
+}
 export interface QuizQuestion {
   no: number;
   content: string;
@@ -53,7 +60,6 @@ export interface ReqSolveQuiz {
 }
 export interface ResSolveQuiz {
   is_win: boolean;
-  is_ended: boolean;
   correct_answer: string;
 }
 
