@@ -21,5 +21,8 @@ export async function corsAllowMiddleware(ctx: SysTypes.ExtendedRouterContext, n
   if (configs.config.http.cors.methods) {
     ctx.set('Access-Control-Allow-Methods', configs.config.http.cors.methods);
   }
+  if (configs.config.http.cors.headers) {
+    ctx.set('Access-Control-Allow-Headers', configs.config.http.cors.headers);
+  }
   await next();
 }

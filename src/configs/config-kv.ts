@@ -14,6 +14,10 @@ const configMappers = {
     if (!value) return;
     root.http.cors.methods = value;
   },
+  'HTTP_CORS_HEADERS': (root: RootConfig, value: any) => {
+    if (!value) return;
+    root.http.cors.headers = value;
+  },
   'MYSQL_HOST': (root: RootConfig, value: any) => root.mysql.host = value,
   'MYSQL_PORT': (root: RootConfig, value: any) => root.mysql.port = value,
   'MYSQL_USER': (root: RootConfig, value: any) => root.mysql.user = value,
@@ -39,7 +43,8 @@ export function map(rawConfigMap: { [key: string]: string | number}): RootConfig
       port: null,
       cors: {
         origin: null,
-        methods: null
+        methods: null,
+        headers: null
       }
     },
     mysql: {

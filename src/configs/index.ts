@@ -9,6 +9,7 @@ export interface CredentialConfig {
 export interface HttpCorsConfig {
   origin: string;
   methods: string;
+  headers: string;
 }
 export interface HttpConfig {
   port: number; 
