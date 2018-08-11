@@ -6,8 +6,13 @@ import fileConfReader from './file-conf-reader';
 export interface CredentialConfig {
   serverKey: string;
 }
+export interface HttpCorsConfig {
+  origin: string;
+  methods: string;
+}
 export interface HttpConfig {
   port: number; 
+  cors?: HttpCorsConfig;
 }
 export interface MysqlConfig {
   host: string;

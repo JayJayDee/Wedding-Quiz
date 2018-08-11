@@ -11,6 +11,7 @@ import log from './loggers';
 
 const app = new Koa();
 app.use(KoaBodyParser());
+app.use(middlewares.corsAllowMiddleware);
 app.use(middlewares.responseBuildingMiddleware);
 app.use(middlewares.errorMiddleware);
 endpoints.reigsterRoutersToApp(app);
