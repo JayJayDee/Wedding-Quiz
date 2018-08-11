@@ -16,10 +16,10 @@ export async function responseBuildingMiddleware(ctx: SysTypes.ExtendedRouterCon
 
 export async function corsAllowMiddleware(ctx: SysTypes.ExtendedRouterContext, next: () => any) {
   if (configs.config.http.cors.origin) {
-    ctx.response.headers['Access-Control-Allow-Origin'] = configs.config.http.cors.origin
+    ctx.set('Access-Control-Allow-Origin', configs.config.http.cors.origin);
   }
   if (configs.config.http.cors.methods) {
-    ctx.response.headers['Access-Control-Allow-Methods'] = configs.config.http.cors.methods
+    ctx.set('Access-Control-Allow-Methods', configs.config.http.cors.methods);
   }
   await next();
 }
