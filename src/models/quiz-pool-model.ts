@@ -90,7 +90,7 @@ export const QuizPoolModel = {
       if (elem['question_type'] === 'TEXT') type = QuestionType.TEXT;
       else if (elem['question_type'] === 'IMAGE') type = QuestionType.IMAGE;
       return {
-        no: elem['no'],
+        question_no: elem['no'],
         type: type,
         content: elem['content']
       };

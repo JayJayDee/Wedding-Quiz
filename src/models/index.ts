@@ -36,7 +36,7 @@ export interface QuizStatus {
   is_ended: boolean;
 }
 export interface QuizQuestion {
-  no: number;
+  question_no: number;
   content: string;
   type: QuestionType;
 }
