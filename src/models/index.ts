@@ -66,3 +66,4 @@ export interface ResSolveQuiz {
 export { MemberModel } from './member-model';
 export { QuizPoolModel } from './quiz-pool-model';
 export { PlayModel } from './play-model';
+export { RankModel } from './rank-model';
