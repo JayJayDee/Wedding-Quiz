@@ -181,6 +181,22 @@ export const PlayModel = {
       if (resp.affectedRows !== 1) {
         throw new QuizSolveFailError('failed to process solve request');
       }
+      
+      //5. select quiz info
+      let descQuery = 
+      `
+        SELECT 
+          *
+        FROM 
+          wedd_quiz_pool
+        WHERE 
+          no=?
+      `;
+      resp = await trans.query(descQuery, [rawCorrect.quiz_no]);
+      if (resp.length !== 1) {
+        throw new QuizSolveFailError('invalid quiz status');
+      }
+      let answerDesc: string = resp[0].answer_description;
 
       //5. transaction commit
       await trans.commit();
@@ -188,7 +204,8 @@ export const PlayModel = {
       //6. write result 
       let result: ResSolveQuiz = {
         is_win: isWin,
-        correct_answer: correct.content
+        correct_answer: correct.content,
+        answer_description: answerDesc
       };
       return result;
 

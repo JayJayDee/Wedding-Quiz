@@ -61,6 +61,7 @@ export interface ReqSolveQuiz {
 export interface ResSolveQuiz {
   is_win: boolean;
   correct_answer: string;
+  answer_description: string;
 }
 
 export { MemberModel } from './member-model';
