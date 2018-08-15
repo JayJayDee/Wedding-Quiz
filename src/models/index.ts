@@ -49,6 +49,13 @@ export interface Quiz {
   questions: QuizQuestion[];
   choices: QuizChoice[];
 }
+export interface RankElement {
+  rank: number;
+  name: string;
+  phone: string;
+  win_count: number;
+  play_time: number;
+}
 
 export interface ReqMemberCreate { 
   name: string;
