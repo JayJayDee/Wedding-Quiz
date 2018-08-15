@@ -16,9 +16,6 @@ router.get('/member/:member_token/quiz', async (ctx: ExtendedRouterContext) => {
   if (!memberNo) throw new InvalidCredentialError();
 
   let quiz: Quiz = await PlayModel.getPlayableQuiz(memberNo);
-  if (quiz === null) {
-    throw new AllQuizPlayedError();
-  }
   let playStatus: QuizStatus = await PlayModel.getQuizPlayStatus(memberNo);
 
   ctx.sendApiSuccess({
