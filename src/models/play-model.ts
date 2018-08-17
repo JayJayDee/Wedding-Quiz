@@ -202,10 +202,14 @@ export const PlayModel = {
       await trans.commit();
 
       //6. write result 
+      let gainScore: number = 0;
+      if (isWin === true) gainScore = parseInt(resp[0].difficulty) * 10;
+
       let result: ResSolveQuiz = {
         is_win: isWin,
         correct_answer: correct.content,
-        answer_description: answerDesc
+        answer_description: answerDesc,
+        gain_score: gainScore
       };
       return result;
 

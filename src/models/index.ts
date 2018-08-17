@@ -70,6 +70,7 @@ export interface ResSolveQuiz {
   is_win: boolean;
   correct_answer: string;
   answer_description: string;
+  gain_score: number;
 }
 
 export { MemberModel } from './member-model';
