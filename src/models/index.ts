@@ -55,6 +55,7 @@ export interface RankElement {
   phone: string;
   win_count: number;
   play_time: number;
+  score_sum: number;
 }
 
 export interface ReqMemberCreate { 
