@@ -2,9 +2,43 @@
 import * as _ from 'lodash';
 
 import db from '../databases';
-import { RankElement } from '.';
+import { RankElement, MyRank } from '.';
 
 export const RankModel = {
+
+  getMyRank: async function(memberNo: number): Promise<MyRank> {
+    let query = 
+    `
+    SET @cnt := 0;
+    SELECT  
+      enders.rank
+    FROM 
+      (SELECT 
+        (@cnt := @cnt + 1) AS rank,
+        play.member_no,
+        SUM(IF(play.is_win=1, 1, 0)) AS win_count,
+        TIMESTAMPDIFF(SECOND, MIN(play.played_date), MAX(play.played_date)) AS play_time,
+        SUM(IF(play.is_win=1, q.difficulty * 10, 0)) AS score_sum
+      FROM 
+        wedd_quiz_play AS play
+      INNER JOIN 
+        wedd_quiz_pool AS q ON q.no=play.quiz_no
+      WHERE 
+        play.is_played=1 
+      GROUP BY 
+        play.member_no
+      HAVING 
+        COUNT(play.no) >= 7) AS enders
+    WHERE 
+      enders.member_no=?
+    `;
+    let params: any[] = [memberNo];
+    let rows: any[] = await db.query(query, params);
+    if (rows.length === 0) return null;
+    return {
+      rank: rows[0].rank
+    };
+  },
 
   getGlobalRanks: async function(): Promise<RankElement[]> {
     let query = 
@@ -32,7 +66,7 @@ export const RankModel = {
     INNER JOIN 
       wedd_member m ON m.no=quiz_enders.member_no
     ORDER BY 
-      win_count DESC,
+      score_sum DESC,
       play_time ASC
     LIMIT 10
     `;

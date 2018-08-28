@@ -2,7 +2,9 @@
 import * as Router from 'koa-router';
 
 import * as SysTypes from '../types/sys-types';
-import { RankModel, RankElement } from '../models';
+import * as Credential from '../utils/credential';
+import { RankModel, RankElement, MyRank } from '../models';
+import { ParameterValidationError, InvalidCredentialError } from './errors';
 
 const router: Router = new Router();
 
@@ -12,8 +14,16 @@ router.get('/ranks', async function(ctx: SysTypes.ExtendedRouterContext, next: (
 });
 
 router.get('/member/:member_token/rank', async function(ctx: SysTypes.ExtendedRouterContext, next: () => Promise<any>) {
-  ctx.sendApiSuccess({
-  });
+  let memberToken:string = ctx.params['member_token'];
+  if (!memberToken) throw new ParameterValidationError('member_token');
+
+  let memberNo: number = await Credential.decryptMemberToken(memberToken);
+  if (memberNo === null) {
+    throw new InvalidCredentialError();
+  }
+
+  let memberRank: MyRank = await RankModel.getMyRank(memberNo);
+  ctx.sendApiSuccess(memberRank);
 });
 
 export default router;
