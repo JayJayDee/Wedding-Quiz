@@ -9,7 +9,6 @@ export const RankModel = {
   getMyRank: async function(memberNo: number): Promise<MyRank> {
     let query = 
     `
-    SET @cnt := 0;
     SELECT  
       enders.rank
     FROM 
@@ -33,6 +32,7 @@ export const RankModel = {
       enders.member_no=?
     `;
     let params: any[] = [memberNo];
+    await db.query('SET @cnt := 0;');
     let rows: any[] = await db.query(query, params);
     if (rows.length === 0) return null;
     return {
