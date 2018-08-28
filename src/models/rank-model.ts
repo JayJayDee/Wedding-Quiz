@@ -4,18 +4,22 @@ import * as _ from 'lodash';
 import db from '../databases';
 import { RankElement, MyRank } from '.';
 
+interface MyRankRow {
+  rank: number;
+  member_no: number;
+}
+
 export const RankModel = {
 
-  getMyRank: async function(memberNo: number): Promise<MyRank> {
+  getMyRank: async function(memberNo: number, numQuiz: number): Promise<MyRank> {
     let query = 
     `
-    SELECT  
-      enders.rank
+    SELECT 
+      (@cnt := @cnt + 1) AS rank,
+      rankers.member_no 
     FROM 
       (SELECT 
-        (@cnt := @cnt + 1) AS rank,
         play.member_no,
-        SUM(IF(play.is_win=1, 1, 0)) AS win_count,
         TIMESTAMPDIFF(SECOND, MIN(play.played_date), MAX(play.played_date)) AS play_time,
         SUM(IF(play.is_win=1, q.difficulty * 10, 0)) AS score_sum
       FROM 
@@ -27,20 +31,28 @@ export const RankModel = {
       GROUP BY 
         play.member_no
       HAVING 
-        COUNT(play.no) >= 7) AS enders
-    WHERE 
-      enders.member_no=?
+        COUNT(play.no) >= ?
+      ORDER BY 
+        score_sum DESC, 
+        play_time ASC) AS rankers 
     `;
-    let params: any[] = [memberNo];
+    let params: any[] = [numQuiz];
     await db.query('SET @cnt := 0;');
     let rows: any[] = await db.query(query, params);
-    if (rows.length === 0) return null;
+    if (rows.length === 0) {
+      return {
+        rank: null,
+        challengers: 0
+      };
+    }
+    let myRow: any = _.find(rows, (row: any) => row.member_no === memberNo);
     return {
-      rank: rows[0].rank
+      rank: myRow ? myRow.rank : null,
+      challengers: rows.length
     };
   },
 
-  getGlobalRanks: async function(): Promise<RankElement[]> {
+  getGlobalRanks: async function(numQuiz: number): Promise<RankElement[]> {
     let query = 
     `
     SELECT 
@@ -62,7 +74,7 @@ export const RankModel = {
       GROUP BY 
         play.member_no
       HAVING 
-        COUNT(play.no) >= 7) AS quiz_enders
+        COUNT(play.no) >= ?) AS quiz_enders
     INNER JOIN 
       wedd_member m ON m.no=quiz_enders.member_no
     ORDER BY 
@@ -70,7 +82,7 @@ export const RankModel = {
       play_time ASC
     LIMIT 10
     `;
-    let rows: any[] = await db.query(query);
+    let rows: any[] = await db.query(query, [numQuiz]);
     let rank = 1;
     let elems: RankElement[] = _.map(rows, (row: any) => {
       let elem: RankElement = {

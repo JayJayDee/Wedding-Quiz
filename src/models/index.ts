@@ -59,6 +59,7 @@ export interface RankElement {
 }
 export interface MyRank {
   rank: number;
+  challengers: number;
 }
 
 export interface ReqMemberCreate { 
