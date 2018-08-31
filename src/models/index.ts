@@ -33,6 +33,7 @@ export interface QuizStatus {
   num_played: number;
   num_correct: number;
   num_incorrect: number;
+  score_sum: number;
   is_ended: boolean;
 }
 export interface QuizQuestion {

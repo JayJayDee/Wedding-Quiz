@@ -21,14 +21,18 @@ export const PlayModel = {
     let query: string = 
     `
       SELECT 
-        COUNT(no) AS num_all_quiz,
-        SUM(IF(is_played=1 AND is_win=1, 1, 0)) AS num_correct,
-        SUM(IF(is_played=1 AND is_win=0, 1, 0)) AS num_incorrect,
-        SUM(IF(is_played=1, 1, 0)) AS num_played
+        COUNT(p.no) AS num_all_quiz,
+        SUM(IF(p.is_played=1 AND p.is_win=1, 1, 0)) AS num_correct,
+        SUM(IF(p.is_played=1 AND p.is_win=0, 1, 0)) AS num_incorrect,
+        SUM(IF(p.is_played=1, 1, 0)) AS num_played,
+        SUM(q.difficulty * 10) AS sum_score
       FROM 
-        wedd_quiz_play 
+        wedd_quiz_play AS p
+      INNER JOIN 
+        wedd_quiz_pool AS q 
+        ON p.quiz_no = q.no
       WHERE 
-        member_no=?
+        p.member_no=?
     `;
     let params: any[] = [memberNo];
     let rows: any[] = await db.query(query, params);
@@ -39,6 +43,7 @@ export const PlayModel = {
       num_played: rawResp.num_played,
       num_correct: rawResp.num_correct,
       num_incorrect: rawResp.num_incorrect,
+      score_sum: rawResp.sum_score,
       is_ended: false
     };
 
