@@ -4,7 +4,7 @@ import * as _ from 'lodash';
 import db, { TransactionExecutor } from '../databases';
 import { config } from '../configs';
 import { QuizPoolModel } from './quiz-pool-model';
-import { Quiz, ReqSolveQuiz, ResSolveQuiz, InvalidMemberStatusError, QuizSolveFailError, QuizInvalidChoiceError, QuizStatus } from '.';
+import { Quiz, ReqSolveQuiz, ResSolveQuiz, InvalidMemberStatusError, QuizSolveFailError, QuizInvalidChoiceError, QuizStatus, QuizResult } from '.';
 import { AllQuizPlayedError } from '../rest-endpoints/errors';
 import log from '../loggers';
 
@@ -16,6 +16,32 @@ interface CorrectChoice {
 }
 
 export const PlayModel = {
+
+  getDetailQuizPlayResults: async function(memberNo: number): Promise<QuizResult[]> {
+    let query = 
+    `
+      SELECT 
+        p.quiz_no,
+        p.is_played,
+        p.is_win
+      FROM 
+        wedd_quiz_play AS p 
+      WHERE 
+        p.member_no=?
+      ORDER BY 
+        p.no ASC 
+    `;
+    let params: any[] = [memberNo];
+    let rows: any[] = await db.query(query, params);
+    let quizReses: QuizResult[] = _.map(rows, (row: any) => {
+      return {
+        quiz_no: row.quiz_no,
+        is_win: row.is_win === 1 ? true : false,
+        is_played: row.is_played === 1 ? true : false
+      };
+    });
+    return quizReses;
+  },
 
   getQuizPlayStatus: async function(memberNo: number): Promise<QuizStatus> {
     let query: string = 

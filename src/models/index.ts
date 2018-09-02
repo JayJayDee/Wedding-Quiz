@@ -78,6 +78,12 @@ export interface ResSolveQuiz {
   gain_score: number;
 }
 
+export interface QuizResult {
+  quiz_no: number;
+  is_win: boolean;
+  is_played: boolean;
+}
+
 export { MemberModel } from './member-model';
 export { QuizPoolModel } from './quiz-pool-model';
 export { PlayModel } from './play-model';
