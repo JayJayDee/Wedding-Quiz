@@ -84,7 +84,10 @@ export interface QuizResult {
   is_played: boolean;
 }
 
+export type QuizConfig = {[key: string]: string};
+
 export { MemberModel } from './member-model';
 export { QuizPoolModel } from './quiz-pool-model';
 export { PlayModel } from './play-model';
 export { RankModel } from './rank-model';
+export { ConfigModel } from './config-model';

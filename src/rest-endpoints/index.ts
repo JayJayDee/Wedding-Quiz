@@ -6,6 +6,7 @@ import memberRouter from './member-endpoints';
 import quizRouter from './quiz-endpoints';
 import memberPlayRouter from './member-play-endpoints';
 import rankingRouter from './ranking-endpoints';
+import miscRouter from './misc-endpoints';
 
 export function reigsterRoutersToApp(app: Koa): void {
   app.use(memberRouter.routes());
@@ -19,4 +20,7 @@ export function reigsterRoutersToApp(app: Koa): void {
 
   app.use(rankingRouter.routes());
   app.use(rankingRouter.allowedMethods());
+
+  app.use(miscRouter.routes());
+  app.use(miscRouter.allowedMethods());
 }
