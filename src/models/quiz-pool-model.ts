@@ -2,7 +2,7 @@
 import * as _ from 'lodash';
 
 import db from '../databases';
-import { QuizQuestion, QuestionType, QuizChoice, Quiz } from './index';
+import { QuizQuestion, QuestionType, QuizChoice, Quiz, QuizTest } from './index';
 
 export const QuizPoolModel = {
 
@@ -44,6 +44,31 @@ export const QuizPoolModel = {
       questions: await this.getQuizQuestions(quizNo) 
     };
     return quiz;
+  },
+
+  getQuizTest: async function(quizNo: number): Promise<QuizTest> {
+    const query: string = 
+    `
+      SELECT 
+        no,
+        answer_description,
+        (SELECT no FROM wedd_quiz_choice WHERE 
+          quiz_no=? AND is_answer=1) AS answer_no
+      FROM 
+        wedd_quiz_pool 
+      WHERE 
+        no=?
+    `;
+    const params = [quizNo, quizNo];
+    const rows: any[] = await db.query(query, params);
+
+    if (rows.length === 0) return null;
+    let quizTest: QuizTest = {
+      quiz_no: rows[0].no,
+      answer_no: rows[0].answer_no,
+      answer_description: rows[0].answer_description
+    };
+    return quizTest;
   },
 
   getQuizChoices: async function(quizNo: number): Promise<QuizChoice[]> {

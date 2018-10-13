@@ -86,6 +86,12 @@ export interface QuizResult {
 
 export type QuizConfig = {[key: string]: string | boolean | number};
 
+export interface QuizTest {
+  quiz_no: number;
+  answer_description: string;
+  answer_no: number;
+}
+
 export { MemberModel } from './member-model';
 export { QuizPoolModel } from './quiz-pool-model';
 export { PlayModel } from './play-model';
