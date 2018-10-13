@@ -84,12 +84,16 @@ export const PlayModel = {
     let queryArr: string[] = [];
     let params: any[] = [];
 
-    let quizNos: number[] = await QuizPoolModel.getQuizNos();
+    const numDifficulty2 = Math.round(numQuizPerMember * 0.4);
+    const numDifficulty1 = Math.round(numQuizPerMember * 0.6);
+
+    const quizNos = 
+      _.shuffle(
+        (await QuizPoolModel.getQuizNosByDifficulty(1, numDifficulty1))
+        .concat(await QuizPoolModel.getQuizNosByDifficulty(2, numDifficulty2)));
     
-    for (let i = 0; i < numQuizPerMember; i++) {
-      let randIdx = Math.floor(Math.random() * (quizNos.length - 1));
-      let value = quizNos[randIdx];
-      quizNos = _.without(quizNos, quizNos[randIdx]);
+    for (let i = 0; i < quizNos.length; i++) {
+      let value = quizNos[i];
       queryArr.push('(?,?,?,0,0)');
       params.push(value, memberNo, i);
     }

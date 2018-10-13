@@ -6,7 +6,7 @@ import { QuizQuestion, QuestionType, QuizChoice, Quiz, QuizTest } from './index'
 
 export const QuizPoolModel = {
 
-  getQuizNos: async function(): Promise<number[]> {
+  async getQuizNos(): Promise<number[]> {
     let query: string = 
     `
       SELECT 
@@ -20,6 +20,24 @@ export const QuizPoolModel = {
     return _.map(rows, (elem: any) => {
       return elem.no;
     });
+  },
+
+  async getQuizNosByDifficulty(difficulty: number, size: number): Promise<number[]> {
+    const query = 
+    `
+      SELECT 
+        no
+      FROM 
+        wedd_quiz_pool 
+      WHERE 
+        difficulty=?
+      ORDER BY 
+        rand()
+      LIMIT ?
+    `;
+    const params = [difficulty, size];
+    let rows: any[] = await db.query(query, params);
+    return _.map(rows, (elem: any) => elem.no);
   },
   
   getQuiz: async function(quizNo: number): Promise<Quiz> {
