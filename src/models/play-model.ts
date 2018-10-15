@@ -51,7 +51,7 @@ export const PlayModel = {
         SUM(IF(p.is_played=1 AND p.is_win=1, 1, 0)) AS num_correct,
         SUM(IF(p.is_played=1 AND p.is_win=0, 1, 0)) AS num_incorrect,
         SUM(IF(p.is_played=1, 1, 0)) AS num_played,
-        SUM(q.difficulty * 10) AS sum_score
+        SUM(IF(p.is_win = 1, q.difficulty, 0)) * 10 AS sum_score
       FROM 
         wedd_quiz_play AS p
       INNER JOIN 
