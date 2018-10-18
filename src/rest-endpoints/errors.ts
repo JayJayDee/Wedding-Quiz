@@ -8,9 +8,21 @@ export class BaseLogicalError extends Error {
   }
 }
 
+export class MemberDuplicateError extends BaseLogicalError {
+  constructor() {
+    super('MEMBER_DUPLICATE', '중복되는 전화번호입니다.');
+  }
+}
+
 export class ParameterValidationError extends BaseLogicalError {
   constructor(keyName: string) {
     super('INVALID_PARAM', `parameter not supplied or invalid param: ${keyName}`);
+  }
+}
+
+export class WrongInputError extends BaseLogicalError {
+  constructor(cause: string) {
+    super('WRONG_INPUT', cause);
   }
 }
 

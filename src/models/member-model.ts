@@ -10,13 +10,15 @@ export const MemberModel = {
     `
       INSERT INTO 
         wedd_member 
-      SET 
-        name=?,
-        phone=?,
-        reg_date=NOW()
+        (name, phone, reg_date) 
+      SELECT 
+        ?, ?, NOW() 
+      WHERE 
+        ? NOT IN (SELECT phone FROM wedd_member)
     `;
-    let params: any[] = [member.name, member.phone];
+    let params: any[] = [member.name, member.phone, member.phone];
     let resp: any = await db.query(query, params);
+    if (resp.affectedRows === 0) return null;
     let memberNo: number = resp.insertId;
     return memberNo;
   },

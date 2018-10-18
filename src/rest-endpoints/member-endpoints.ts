@@ -5,7 +5,7 @@ import * as SysTypes from '../types/sys-types';
 import * as Credential from '../utils/credential';
 
 import { MemberModel, Member, ReqMemberCreate, PlayModel, QuizStatus } from '../models';
-import { ParameterValidationError, InvalidCredentialError, ObjectNotFoundError } from './errors';
+import { ParameterValidationError, InvalidCredentialError, ObjectNotFoundError, WrongInputError, MemberDuplicateError } from './errors';
 
 const router: Router = new Router;
 
@@ -16,14 +16,28 @@ router.post('/member', async function(ctx: SysTypes.ExtendedRouterContext) {
   if (!phone) throw new ParameterValidationError('phone');
   if (!name) throw new ParameterValidationError('name');
 
+  if (!name.match(/^[가-힣]+$/)) {
+    throw new WrongInputError('이름은 한글만 입력할 수 있습니다.');
+  }
+
+  if (!phone.match(/^[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}$/) && 
+        !phone.match(/^[0-9]{2,3}[0-9]{3,4}[0-9]{4}$/)) {
+    throw new WrongInputError('전화번호만 입력가능합니다.');
+  }
+
+  phone = phone.replace(/\-/g, '');
+  name = name.trim();
+
   let param: ReqMemberCreate = {
-    name: name,
-    phone: phone
+    name, phone
   };
 
   let memberNo: number = await MemberModel.insertNewMember(param);
-  let memberToken: string = await Credential.generateMemberToken(memberNo);
+  if (!memberNo) {
+    throw new MemberDuplicateError();
+  }
 
+  let memberToken: string = await Credential.generateMemberToken(memberNo);
   await PlayModel.generateQuizPlay(memberNo);
 
   ctx.sendApiSuccess({
