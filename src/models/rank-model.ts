@@ -52,7 +52,7 @@ export const RankModel = {
     };
   },
 
-  getGlobalRanks: async function(numQuiz: number): Promise<RankElement[]> {
+  getGlobalRanks: async function(numQuiz: number, limit: number): Promise<RankElement[]> {
     let query = 
     `
     SELECT 
@@ -80,9 +80,9 @@ export const RankModel = {
     ORDER BY 
       score_sum DESC,
       play_time ASC
-    LIMIT 10
+    LIMIT ?
     `;
-    let rows: any[] = await db.query(query, [numQuiz]);
+    let rows: any[] = await db.query(query, [numQuiz, limit]);
     let rank = 1;
     let elems: RankElement[] = _.map(rows, (row: any) => {
       let elem: RankElement = {
