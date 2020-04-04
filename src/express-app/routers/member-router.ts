@@ -2,8 +2,8 @@ import { Router } from 'express';
 import { IsDefined } from 'class-validator';
 
 import { wrapAsync, validate } from './utils';
-import { register, get } from '../../services/member-service';
 import { authorize } from '../authorization-handler';
+import { memberService } from '../../services';
 
 export const memberRouter =
   () => {
@@ -27,7 +27,7 @@ const memberPost = () => ([
     await validate(param, MemberPostParam);
     const { name, phone, email } = param;
 
-    const resp = await register({ name, phone, email });
+    const resp = await memberService.register({ name, phone, email });
     const token = resp.token;
     const numQuizzes = resp.numQuizzes
 
@@ -42,7 +42,7 @@ const memberPost = () => ([
 const memberGet = () => ([
   authorize(),
   wrapAsync(async (req, res) => {
-    const member = await get({ no: 1 });
+    const member = await memberService.get({ no: 1 });
     res.status(200).json({ member });
   })
 ]);

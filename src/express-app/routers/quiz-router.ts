@@ -1,7 +1,8 @@
 import { Router } from 'express';
 
 import { wrapAsync } from './utils';
-import { fetchQuizToBeSolved } from '../../services/quiz-service';
+import { authorize } from '../authorization-handler';
+import { quizService } from '../../services';
 
 export const quizRouter =
   () => {
@@ -10,9 +11,14 @@ export const quizRouter =
     return router;
   };
 
-const quizGetToBeSolved = () =>
+/**
+ * GET /quiz
+ */
+const quizGetToBeSolved = () => ([
+  authorize(),
   wrapAsync(async (req, res) => {
-    const memberNo = 1; // TODO: to be replaced from JWT
-    const quiz = await fetchQuizToBeSolved({ memberNo });
+    const memberNo = req.member.no;
+    const quiz = await quizService.fetchQuizToBeSolved({ memberNo });
     res.status(200).json({ quiz });
-  });
+  })
+]);

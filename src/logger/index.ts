@@ -2,7 +2,7 @@ import moment from 'moment';
 import 'moment-timezone';
 
 const makeLog = (args: any[], tag: string, subTag?: string) =>
-  [`${moment().tz('Asia/Seoul').format('YYYY-MM-DD HH:MM:SS')} [${tag}${subTag ? `/${subTag}` : ''}]`, ...args];
+  [`${moment().tz('Asia/Seoul').format('YYYY-MM-DD HH:mm:ss')} [${tag}${subTag ? `/${subTag}` : ''}]`, ...args];
 
 export const logger =
   ({ tag, subTag }: {

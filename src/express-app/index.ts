@@ -4,8 +4,8 @@ import { errorHandler } from './error-handler';
 
 declare module 'express-serve-static-core' {
   interface Request {
-    user: {
-      userId: number;
+    member: {
+      no: number;
     };
   }
 }
