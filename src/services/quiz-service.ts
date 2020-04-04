@@ -13,6 +13,7 @@ export const fetchQuizToBeSolved =
         memberNo,
         choiceNo: IsNull()
       },
+      relations: [ 'quiz', 'quiz.choices' ],
       order: {
         no: 'ASC'
       }
@@ -21,13 +22,8 @@ export const fetchQuizToBeSolved =
     if (!lastPlay) {
       return null;
     }
-    const quizNo = lastPlay.quizNo;
-    const quiz = await getRepository(Quiz).findOne({
-      where: {
-        no: quizNo
-      },
-      relations: [ 'choices' ]
-    });
-    console.log(quiz);
-    return {};
+    if (!lastPlay.quiz) {
+      return null;
+    }
+    return lastPlay.quiz;
   };

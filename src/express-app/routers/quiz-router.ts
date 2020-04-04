@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import { wrapAsync } from '../wrap-async';
+import { wrapAsync } from './utils';
 import { fetchQuizToBeSolved } from '../../services/quiz-service';
 
 export const quizRouter =

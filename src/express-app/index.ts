@@ -2,6 +2,14 @@ import express from 'express';
 import { memberRouter, quizRouter } from './routers';
 import { errorHandler } from './error-handler';
 
+declare module 'express-serve-static-core' {
+  interface Request {
+    user: {
+      userId: number;
+    };
+  }
+}
+
 export const initExpressApp =
   async () => {
     const app = express();

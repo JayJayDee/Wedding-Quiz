@@ -1,8 +1,9 @@
 import { Router } from 'express';
+import { IsDefined } from 'class-validator';
 
-import { wrapAsync } from '../wrap-async';
+import { wrapAsync, validate } from './utils';
 import { register, get } from '../../services/member-service';
-import { WeddQuizError } from '../../errors';
+import { authorize } from '../authorization-handler';
 
 export const memberRouter =
   () => {
@@ -15,26 +16,33 @@ export const memberRouter =
 /**
  * POST /member
  */
-const memberPost = () =>
+class MemberPostParam {
+  @IsDefined() public name: string;
+  @IsDefined() public phone: string;
+  @IsDefined() public email: string;
+}
+const memberPost = () => ([
   wrapAsync(async (req, res) => {
-    const { name, phone, email } = req.body;
-
-    if (!name || !phone || !email) {
-      throw new WeddQuizError(`name,phone,email required`);
-    }
+    const param: MemberPostParam = req.body;
+    await validate(param, MemberPostParam);
+    const { name, phone, email } = param;
 
     const resp = await register({ name, phone, email });
     const token = resp.token;
     const numQuizzes = resp.numQuizzes
 
     res.status(200).json({ token, numQuizzes });
-  });
+  })
+]);
+
 
 /**
  * GET /member
  */
-const memberGet = () =>
+const memberGet = () => ([
+  authorize(),
   wrapAsync(async (req, res) => {
     const member = await get({ no: 1 });
     res.status(200).json({ member });
-  });
+  })
+]);
