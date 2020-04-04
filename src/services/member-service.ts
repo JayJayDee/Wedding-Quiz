@@ -40,3 +40,18 @@ export const register =
       throw err;
     }
   };
+
+export const get =
+  async ({ no }:  { no: number }) => {
+    log.debug('gain param', no);
+
+    const repo = getRepository(Member);
+    const member = await repo.findOne({
+      where: { no }
+    });
+
+    if (!member) {
+      return null;
+    }
+    return member;
+  };

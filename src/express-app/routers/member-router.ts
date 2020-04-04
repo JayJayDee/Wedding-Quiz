@@ -7,12 +7,16 @@ import { WeddQuizError } from '../../errors';
 export const memberRouter =
   () => {
     const router = Router();
-    router.post('/', registerMember());
+    router.post('/', memberPost());
+    router.get('/', memberGet());
     return router;
   };
 
-const registerMember = () =>
-  wrapAsync(async (req, res, next) => {
+/**
+ * POST /member
+ */
+const memberPost = () =>
+  wrapAsync(async (req, res) => {
     const { name, phone, email } = req.body;
 
     if (!name || !phone || !email) {
@@ -23,4 +27,12 @@ const registerMember = () =>
     const token = resp.token;
 
     res.status(200).json({ token });
+  });
+
+/**
+ * GET /member
+ */
+const memberGet = () =>
+  wrapAsync(async (req, res) => {
+    res.status(200).json({});
   });

@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, Unique, CreateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, Unique, CreateDateColumn, OneToMany } from 'typeorm';
+import { Play } from './play';
 
 @Entity()
 @Unique([ 'name', 'phone' ])
@@ -20,4 +21,7 @@ export class Member {
     type: 'timestamp'
   })
   public regDate: Date;
+
+  @OneToMany(() => Play, (play) => play.member)
+  public plays: Play[];
 }
