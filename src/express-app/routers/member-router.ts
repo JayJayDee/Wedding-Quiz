@@ -1,7 +1,7 @@
 import { Router } from 'express';
 
 import { wrapAsync } from '../wrap-async';
-import { register } from '../../services/member-service';
+import { register, get } from '../../services/member-service';
 import { WeddQuizError } from '../../errors';
 
 export const memberRouter =
@@ -35,5 +35,6 @@ const memberPost = () =>
  */
 const memberGet = () =>
   wrapAsync(async (req, res) => {
-    res.status(200).json({});
+    const member = await get({ no: 1 });
+    res.status(200).json({ member });
   });

@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, Index, OneToOne } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, Index, OneToOne, AfterLoad } from "typeorm";
 import { Quiz } from './quiz';
 import { Member } from './member';
 import { QuizChoice } from "./quiz-choice";
