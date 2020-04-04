@@ -1,5 +1,5 @@
 import express from 'express';
-import { memberRouter } from './routers';
+import { memberRouter, quizRouter } from './routers';
 import { errorHandler } from './error-handler';
 
 export const initExpressApp =
@@ -11,6 +11,7 @@ export const initExpressApp =
 
     // register routes
     app.use('/member', memberRouter());
+    app.use('/quiz', quizRouter());
 
     // error handlers
     app.use(errorHandler());
