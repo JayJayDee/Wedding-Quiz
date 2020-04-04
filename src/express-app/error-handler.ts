@@ -1,5 +1,4 @@
 import { ErrorRequestHandler } from 'express';
-import { isArray } from 'util';
 
 import { WeddQuizError } from '../errors';
 
