@@ -18,6 +18,7 @@ type RegisterParam = {
 };
 type RegisterResp = {
   token: string;
+  numQuizzes: number;
 };
 
 const JWT_PRIVATE_KEY = cfgMandantory('JWT_PRIVATE_KEY');
@@ -67,13 +68,16 @@ export const register =
 
         // 3. insert plays.
         const playRepo = mgr.getRepository(Play);
-        // const rawPlays = randomQuizNos.map((no) =>
-        //   playRepo.create({
-        //     quizNo: no,
-        //     memberNo: newMemberNo
-        //   });
-
-        return { token };
+        const rawPlays = randomQuizNos.map((no) =>
+          playRepo.create({
+            quizNo: no,
+            memberNo: newMemberNo as number
+          }));
+        await playRepo.save(rawPlays);
+        return {
+          token,
+          numQuizzes: rawPlays.length
+        };
       }
     );
   };

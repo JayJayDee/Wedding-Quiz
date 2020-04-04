@@ -25,8 +25,9 @@ const memberPost = () =>
 
     const resp = await register({ name, phone, email });
     const token = resp.token;
+    const numQuizzes = resp.numQuizzes
 
-    res.status(200).json({ token });
+    res.status(200).json({ token, numQuizzes });
   });
 
 /**
