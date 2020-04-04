@@ -1,40 +1,36 @@
 {
   "name": "wedding-quiz",
   "version": "1.0.0",
-  "description": "",
-  "main": "bin/app.js",
+  "description": "Wedding-Quiz application.v2",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon --watch ./src -e ts --exec \"ts-node -T --project ./tsconfig.json ./src/server\""
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/JayJayDee/Wedding-Quiz.git"
   },
-  "author": "jaydee",
+  "author": "JayJayDee (jindongp@gmail.com)",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/JayJayDee/Wedding-Quiz/issues"
   },
   "homepage": "https://github.com/JayJayDee/Wedding-Quiz#readme",
-  "devDependencies": {
-    "@types/koa": "^2.0.46",
-    "@types/koa-bodyparser": "^5.0.1",
-    "@types/koa-router": "^7.0.30",
-    "@types/lodash": "^4.14.114",
-    "@types/mysql": "^2.15.5",
-    "@types/winston": "^2.3.9",
-    "gulp": "^3.9.1",
-    "gulp-tsc": "^1.3.2",
-    "run-sequence": "^2.2.1"
-  },
   "dependencies": {
-    "@types/moment": "^2.13.0",
-    "koa": "^2.5.2",
-    "koa-bodyparser": "^4.2.1",
-    "koa-router": "^7.4.0",
-    "lodash": "^4.17.10",
-    "moment": "^2.22.2",
-    "mysql": "^2.16.0",
-    "winston": "^3.0.0"
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "moment": "^2.24.0",
+    "moment-timezone": "^0.5.28",
+    "typeorm": "^0.2.24"
+  },
+  "devDependencies": {
+    "@types/dotenv": "^8.2.0",
+    "@types/moment-timezone": "^0.5.13",
+    "@types/node": "^13.11.0",
+    "nodemon": "^2.0.2",
+    "ts-node": "^8.8.1",
+    "tslint": "^6.1.1",
+    "typescript": "^3.8.3"
   }
 }
