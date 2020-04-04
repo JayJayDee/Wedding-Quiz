@@ -25,14 +25,14 @@ export class Play {
   public choiceNo?: number;
 
   @ManyToOne(() => Quiz, (quiz) => quiz.plays, { nullable: true })
-  @JoinColumn({ referencedColumnName: 'quizNo' })
+  @JoinColumn({ name: 'quizNo' })
   public quiz?: Quiz;
 
   @OneToOne(() => QuizChoice, { nullable: true })
-  @JoinColumn({ referencedColumnName: 'choiceNo' })
+  @JoinColumn({ name: 'choiceNo' })
   public choice?: QuizChoice;
 
   @ManyToOne(() => Member)
-  @JoinColumn({ referencedColumnName: 'memberNo' })
+  @JoinColumn({ name: 'memberNo' })
   public member: Member;
 }

@@ -19,6 +19,6 @@ export class QuizChoice {
   public correct: boolean;
 
   @ManyToOne((type) => Quiz, (quiz) => quiz.choices)
-  @JoinColumn({ referencedColumnName: 'quizNo' })
+  @JoinColumn({ name: 'quizNo' })
   public quiz: Quiz;
 }
