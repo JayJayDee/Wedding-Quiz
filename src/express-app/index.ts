@@ -1,6 +1,6 @@
 import express from 'express';
 import { memberRouter, quizRouter } from './routers';
-import { errorHandler } from './error-handler';
+import { errorHandler } from './handlers';
 
 declare module 'express-serve-static-core' {
   interface Request {

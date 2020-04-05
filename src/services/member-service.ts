@@ -82,12 +82,14 @@ export const register =
   };
 
 export const get =
-  async ({ no }:  { no: number }) => {
-    log.debug('gain param', no);
+  async ({ memberNo }:  { memberNo: number }) => {
+    log.debug('gain param', memberNo);
 
     const repo = getRepository(Member);
     const member = await repo.findOne({
-      where: { no }
+      where: {
+        no: memberNo
+      }
     });
 
     if (!member) {

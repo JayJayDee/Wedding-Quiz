@@ -1,7 +1,7 @@
 import { Router } from 'express';
 
 import { wrapAsync } from './utils';
-import { authorize } from '../authorization-handler';
+import { authorize } from '../handlers';
 import { quizService } from '../../services';
 
 export const quizRouter =

@@ -2,7 +2,7 @@ import { ErrorRequestHandler } from 'express';
 import { isArray } from 'util';
 import { ValidationError } from 'class-validator';
 
-import { WeddQuizError, WeddQuizUnauthorizedError } from '../errors';
+import { WeddQuizError, WeddQuizUnauthorizedError } from '../../errors';
 
 export const errorHandler = (): ErrorRequestHandler =>
   (err, req, res, next) => {
