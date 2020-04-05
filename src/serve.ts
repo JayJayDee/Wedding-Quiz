@@ -8,6 +8,7 @@ import { initMysqlConnection } from './mysql-connector';
 const log = logger({ tag: 'server' });
 
 (async () => {
+  log.info('server starting ...');
   const port = cfgMandantory('HTTP_PORT');
 
   await initMysqlConnection();

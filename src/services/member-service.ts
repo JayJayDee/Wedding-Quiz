@@ -6,8 +6,7 @@ import { Member } from '../entities/member';
 import { logger } from '../logger';
 import { WeddQuizError } from '../errors';
 import { cfgMandantory } from '../configurator';
-import { Quiz } from '../entities/quiz';
-import { Play } from '../entities/play';
+import { Quiz, Play } from '../entities'
 
 const log = logger({ tag: 'member-service' });
 
@@ -83,12 +82,14 @@ export const register =
   };
 
 export const get =
-  async ({ no }:  { no: number }) => {
-    log.debug('gain param', no);
+  async ({ memberNo }:  { memberNo: number }) => {
+    log.debug('gain param', memberNo);
 
     const repo = getRepository(Member);
     const member = await repo.findOne({
-      where: { no }
+      where: {
+        no: memberNo
+      }
     });
 
     if (!member) {

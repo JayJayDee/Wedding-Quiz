@@ -1,7 +1,7 @@
 import { getRepository, IsNull } from 'typeorm';
 
 import { logger } from '../logger';
-import { Play } from '../entities/play';
+import { Play, Quiz } from '../entities';
 
 const log = logger({ tag: 'quiz-service' });
 
@@ -13,6 +13,7 @@ export const fetchQuizToBeSolved =
         memberNo,
         choiceNo: IsNull()
       },
+      relations: [ 'quiz', 'quiz.choices' ],
       order: {
         no: 'ASC'
       }
@@ -21,5 +22,8 @@ export const fetchQuizToBeSolved =
     if (!lastPlay) {
       return null;
     }
-    return {};
+    if (!lastPlay.quiz) {
+      return null;
+    }
+    return lastPlay.quiz;
   };

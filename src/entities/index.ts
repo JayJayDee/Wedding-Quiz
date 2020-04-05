@@ -9,3 +9,9 @@ export const Entities =
     Quiz, QuizChoice,
     Play
   ];
+
+export {
+  Member,
+  Quiz, QuizChoice,
+  Play
+};
