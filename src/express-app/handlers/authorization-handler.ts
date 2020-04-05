@@ -13,6 +13,7 @@ const log = logger({ tag: 'authorizer' });
 
 const JWT_PRIVATE_KEY = cfgMandantory('JWT_PRIVATE_KEY');
 const AUTH_ENABLED = cfgOptional('AUTH_ENABLED', false) ? true : false;
+const MEMBER_ID_INJECTION = cfgOptional('MEMBER_ID_INJECTION', 1);
 
 const defaultAuthorizationFetcher =
   (req: Request): string | undefined =>
@@ -27,6 +28,9 @@ export const authorize =
 
       if (AUTH_ENABLED === false) {
         log.debug('authorization disabled');
+        req.member = {
+          no: Number(MEMBER_ID_INJECTION)
+        };
         return next();
       }
 
