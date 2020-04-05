@@ -27,6 +27,7 @@ DB_DATABASE=xxxx
 JWT_PRIVATE_KEY=xxxx
 NUM_QUIZ_PER_MEMBER=7
 AUTH_ENABLED=true # Optional, default false
+MEMBER_ID_INJECTION=1 # Optional, activates when the AUTH_ENABLED was false
 ```
 
 ## See also
