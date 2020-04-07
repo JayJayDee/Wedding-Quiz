@@ -1,5 +1,5 @@
 import express from 'express';
-import { memberRouter, quizRouter } from './routers';
+import { memberRouter, quizRouter, rankRouter } from './routers';
 import { errorHandler } from './handlers';
 
 declare module 'express-serve-static-core' {
@@ -20,6 +20,7 @@ export const initExpressApp =
     // register routes
     app.use('/member', memberRouter());
     app.use('/quiz', quizRouter());
+    app.use('/rank', rankRouter());
 
     // error handlers
     app.use(errorHandler());

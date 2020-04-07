@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, Index, OneToOne, AfterLoad } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, Index, OneToOne, AfterLoad, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { Quiz } from './quiz';
 import { Member } from './member';
 import { QuizChoice } from "./quiz-choice";
@@ -23,6 +23,16 @@ export class Play {
     nullable: true
   })
   public choiceNo?: number;
+
+  @UpdateDateColumn({
+    type: 'timestamp'
+  })
+  public solvedDate: Date;
+
+  @CreateDateColumn({
+    type: 'timestamp'
+  })
+  public regDate: Date;
 
   @ManyToOne(() => Quiz, (quiz) => quiz.plays, { nullable: true })
   @JoinColumn({ name: 'quizNo' })
