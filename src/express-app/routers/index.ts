@@ -6,3 +6,7 @@ export {
 export {
   quizRouter
 } from './quiz-router';
+
+export {
+  rankRouter
+} from './rank-router';
