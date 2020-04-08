@@ -8,9 +8,19 @@ type GlobalRank = {
   rank: number;
   memberNo: number;
   name: string;
+  phone: string;
   score: number;
   elapsedTime: number;
   completeDate: Date;
+};
+
+const increaser = (initial: number) => {
+  let num = initial;
+  return () => {
+    const ret = num;
+    num++;
+    return ret;
+  };
 };
 
 export const getGlobalRanks =
@@ -41,10 +51,24 @@ export const getGlobalRanks =
         LIMIT ?) AS r
       INNER JOIN
         member m ON m.no=r.memberNo
+      ORDER BY
+        r.score DESC,
+        r.elapsedTime ASC,
+        r.completeDate DESC
     `;
     const rows = await runner.query(sql, [ NUM_QUIZ_PER_MEMBER, top ]) as any[];
-    console.log(rows);
-    return [];
+
+    const incr = increaser(1);
+    const ranks: GlobalRank[] = rows.map((r) => ({
+      rank: incr(),
+      memberNo: r.memberNo,
+      name: r.name,
+      phone: r.phone,
+      score: Number(r.score),
+      elapsedTime: Number(r.elapsedTime),
+      completeDate: r.completeDate
+    }));
+    return ranks;
   };
 
 export const getMyRank =
