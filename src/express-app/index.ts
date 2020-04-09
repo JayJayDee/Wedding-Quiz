@@ -1,4 +1,6 @@
 import express from 'express';
+import cors from 'cors';
+
 import { memberRouter, quizRouter, rankRouter } from './routers';
 import { errorHandler } from './handlers';
 
@@ -15,6 +17,7 @@ export const initExpressApp =
     const app = express();
 
     // express global middlewares
+    app.use(cors());
     app.use(express.json());
 
     // register routes
