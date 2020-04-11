@@ -19,15 +19,14 @@ export const memberRouter =
 class MemberPostParam {
   @IsDefined() public name: string;
   @IsDefined() public phone: string;
-  @IsDefined() public email: string;
 }
 const memberPost = () => ([
   wrapAsync(async (req, res) => {
     const param: MemberPostParam = req.body;
     await validate(param, MemberPostParam);
-    const { name, phone, email } = param;
+    const { name, phone } = param;
 
-    const resp = await memberService.register({ name, phone, email });
+    const resp = await memberService.register({ name, phone });
     const token = resp.token;
     const numQuizzes = resp.numQuizzes
 

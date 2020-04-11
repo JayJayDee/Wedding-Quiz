@@ -14,9 +14,6 @@ export class Member {
   @Column()
   public phone: string;
 
-  @Column()
-  public email: string;
-
   @CreateDateColumn({
     type: 'timestamp'
   })
