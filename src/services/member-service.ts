@@ -13,7 +13,6 @@ const log = logger({ tag: 'member-service' });
 type RegisterParam = {
   name: string;
   phone: string;
-  email: string;
 };
 type RegisterResp = {
   token: string;
@@ -24,15 +23,15 @@ const JWT_PRIVATE_KEY = cfgMandantory('JWT_PRIVATE_KEY');
 const NUM_QUIZ_PER_MEMBER = Number(cfgMandantory('NUM_QUIZ_PER_MEMBER'));
 
 export const register =
-  async ({ name, phone, email }: RegisterParam) => {
-    log.debug('gain param', name, phone, email);
+  async ({ name, phone }: RegisterParam) => {
+    log.debug('gain param', name, phone);
 
     return await getConnection().transaction<RegisterResp>(
       async (mgr) => {
         const memberRepo = mgr.getRepository(Member);
         const newMember =
           memberRepo.create({
-            name, phone, email
+            name, phone
           });
 
         let newMemberNo: number | null = null;
