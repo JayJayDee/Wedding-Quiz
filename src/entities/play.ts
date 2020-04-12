@@ -38,7 +38,7 @@ export class Play {
   @JoinColumn({ name: 'quizNo' })
   public quiz?: Quiz;
 
-  @OneToOne(() => QuizChoice, { nullable: true })
+  @ManyToOne(() => QuizChoice, { nullable: true })
   @JoinColumn({ name: 'choiceNo' })
   public choice?: QuizChoice;
 
