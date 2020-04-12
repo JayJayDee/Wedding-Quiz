@@ -57,6 +57,7 @@ export const getGlobalRanks =
         r.completeDate DESC
     `;
     const rows = await runner.query(sql, [ NUM_QUIZ_PER_MEMBER, top ]) as any[];
+    await runner.release();
 
     const incr = increaser(1);
     const ranks: GlobalRank[] = rows.map((r) => ({
