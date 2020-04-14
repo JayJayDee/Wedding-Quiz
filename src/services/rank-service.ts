@@ -48,6 +48,8 @@ export const getGlobalRanks =
           p.memberNo
         HAVING
           COUNT(p.memberNo) >= ?
+        ORDER BY
+          sscore DESC
         LIMIT ?) AS r
       INNER JOIN
         member m ON m.no=r.memberNo
