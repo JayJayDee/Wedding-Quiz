@@ -49,14 +49,12 @@ export const getGlobalRanks =
         HAVING
           COUNT(p.memberNo) >= ?
         ORDER BY
-          score DESC
+          score DESC,
+          elapsedTime ASC,
+          completeDate DESC
         LIMIT ?) AS r
       INNER JOIN
         member m ON m.no=r.memberNo
-      ORDER BY
-        r.score DESC,
-        r.elapsedTime ASC,
-        r.completeDate DESC
     `;
     const rows = await runner.query(sql, [ NUM_QUIZ_PER_MEMBER, top ]) as any[];
     await runner.release();
