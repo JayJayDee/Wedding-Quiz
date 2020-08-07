@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/JayJayDee/Wedding-Quiz#readme",
   "dependencies": {
-    "class-transformer": "^0.2.3",
+    "class-transformer": "^0.3.1",
     "class-validator": "^0.11.1",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
